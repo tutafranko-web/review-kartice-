@@ -1,0 +1,393 @@
+<!DOCTYPE html>
+<html lang="hr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>reviewcard.hr — NFC kartice za Google recenzije</title>
+<meta name="description" content="NFC kartica za Google recenzije. Gost prisloni telefon i u sekundi je na vašem Google profilu. Bez aplikacija, bez QR gužve — samo tap.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+<div class="page">
+
+  <!-- ================= 0. HEADER ================= -->
+  <nav class="nav">
+    <span class="nav-brand">reviewcard<span style="color:var(--color-accent);">.hr</span></span>
+    <div class="nav-links">
+      <a href="#proizvodi">Kartice</a>
+      <a href="#kako">Kako radi</a>
+      <a href="#paketi">Paketi</a>
+      <a href="#sustav">Napredni sustav</a>
+    </div>
+    <a class="btn btn-primary" data-wa="hero" target="_blank" rel="noopener">Naruči</a>
+  </nav>
+
+  <!-- ================= 1. UVODNA SCROLL ANIMACIJA =================
+       Zamjenjuje rezervirani blok iz prototipa. Kadrovi dolaze iz videa
+       snimljenog na brodu: ugođaj → kartica na ručniku → dodir → Google
+       recenzija s 5 zvjezdica.
+  -->
+  <section class="intro" id="uvod" aria-label="Kako kartica radi">
+    <div class="intro-sticky">
+      <div class="intro-glow" aria-hidden="true"></div>
+
+      <!-- poruka 1 (lijevo) -->
+      <div class="intro-msg" data-side="left" data-from="0" data-to="33" data-anim="slide-left">
+        <div class="intro-msg-inner">
+          <span class="kicker">01</span>
+          <h2>Kartica stoji uz gosta</h2>
+          <p>Na šanku, stolu ili ležaljci — tamo gdje je gostu na dohvat ruke.</p>
+        </div>
+      </div>
+
+      <!-- scena -->
+      <div class="intro-stage" id="introStage">
+        <img class="intro-poster" id="introPoster" src="frames/frame_0001.webp" alt="Kartica za Google recenzije u upotrebi na brodu">
+        <canvas id="introCanvas"></canvas>
+        <div class="intro-loader" id="introLoader"><span></span></div>
+      </div>
+
+      <!-- poruka 2 (desno) -->
+      <div class="intro-msg" data-side="right" data-from="33" data-to="66" data-anim="slide-right">
+        <div class="intro-msg-inner">
+          <span class="kicker">02</span>
+          <h2>Jedan dodir telefonom</h2>
+          <p>NFC čip radi bez aplikacije. Telefon odmah prepozna karticu.</p>
+        </div>
+      </div>
+
+      <!-- poruka 3 (lijevo) — to=101 jer progres 1.0 pada točno u trenutku
+           otpuštanja kadra; poruka tako ostaje do same predaje heroju -->
+      <div class="intro-msg" data-side="left" data-from="66" data-to="101" data-anim="fade-up">
+        <div class="intro-msg-inner">
+          <span class="kicker">03</span>
+          <h2>Pet zvjezdica, bez tipkanja</h2>
+          <p>Google profil se otvara sam — gostu ostaje samo ocijeniti.</p>
+        </div>
+      </div>
+
+      <span class="intro-hint" id="introHint">Skrolaj</span>
+    </div>
+  </section>
+
+  <!-- ================= 2. HERO ================= -->
+  <section class="hero">
+    <div data-reveal>
+      <span class="tag tag-accent" style="margin-bottom:18px;">NFC Google recenzije</span>
+      <h1>
+        <span>Više recenzija.</span>
+        <span class="accent">Jednim dodirom.</span>
+      </h1>
+      <p class="hero-lead">Gost prisloni telefon na karticu i u sekundi je na vašem Google profilu. Bez aplikacija, bez QR gužve — samo tap.</p>
+      <div class="hero-actions">
+        <a class="btn btn-secondary" href="#kako">Pogledaj kako radi</a>
+        <a class="btn btn-primary" data-wa="hero" target="_blank" rel="noopener">Naruči</a>
+      </div>
+      <p class="hero-trust">★★★★★  Radi na svim modernim Android i iPhone uređajima</p>
+    </div>
+
+    <div class="hero-art" data-reveal>
+      <div class="hero-art-glow" aria-hidden="true"></div>
+      <div class="card-tile card-tile--black">
+        <img src="assets/card-black.png" alt="Crna NFC kartica za Google recenzije">
+      </div>
+      <div class="card-tile card-tile--blue">
+        <img src="assets/card-blue.png" alt="Plava NFC kartica za Google recenzije">
+      </div>
+    </div>
+  </section>
+
+  <hr class="hr">
+
+  <!-- ================= 3. KAKO RADI ================= -->
+  <section class="s-kako" id="kako">
+    <div class="section-head" data-reveal>
+      <span class="tag tag-accent">Kako radi</span>
+      <h2>Tri koraka do recenzije</h2>
+    </div>
+    <div class="grid grid-kako" data-reveal>
+      <div class="card">
+        <div class="step-num">01</div>
+        <h3 class="card-title">Postavi karticu</h3>
+        <p class="card-body">Stavi karticu na šank, stol ili recepciju — negdje gdje je gostu na dohvat ruke.</p>
+      </div>
+      <div class="card">
+        <div class="step-num">02</div>
+        <h3 class="card-title">Gost prisloni telefon</h3>
+        <p class="card-body">NFC čip radi bez aplikacije. Telefon odmah prepozna karticu i otvara link.</p>
+      </div>
+      <div class="card">
+        <div class="step-num">03</div>
+        <h3 class="card-title">Otvara se recenzija</h3>
+        <p class="card-body">Tvoj Google profil se otvara u sekundi — gost ostavlja recenziju bez tipkanja adrese.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= 4. PROIZVODI ================= -->
+  <section class="s-proizvodi" id="proizvodi">
+    <div class="section-head" data-reveal>
+      <span class="tag tag-accent">Naše kartice</span>
+      <h2>Dvije boje</h2>
+      <p>Izdržljiva NFC kartica u crnoj ili plavoj izvedbi. Isti dizajn, isti učinak — biraš boju koja pristaje tvom prostoru.</p>
+    </div>
+    <div class="grid grid-proizvodi" data-reveal>
+
+      <div class="card product-card">
+        <div class="product-well">
+          <img src="assets/card-black.png" alt="Crna NFC kartica za Google recenzije">
+        </div>
+        <div class="product-body">
+          <div class="product-head"><h3>Crna kartica</h3></div>
+          <p class="product-desc">Prisloni telefon i gost odmah otvara tvoj Google profil za recenziju.</p>
+          <div class="price-row">
+            <span class="price">20&nbsp;€</span>
+            <span class="price-unit">/ komad</span>
+          </div>
+          <a class="btn btn-primary btn-block" data-wa="crna" target="_blank" rel="noopener">Naruči na WhatsApp</a>
+          <a class="btn btn-secondary btn-block" href="#paketi" style="margin-top:10px;">Naruči</a>
+        </div>
+      </div>
+
+      <div class="card product-card">
+        <div class="product-well">
+          <img src="assets/card-blue.png" alt="Plava NFC kartica za Google recenzije">
+        </div>
+        <div class="product-body">
+          <div class="product-head"><h3>Plava kartica</h3></div>
+          <p class="product-desc">Prisloni telefon i gost odmah otvara tvoj Google profil za recenziju.</p>
+          <div class="price-row">
+            <span class="price">20&nbsp;€</span>
+            <span class="price-unit">/ komad</span>
+          </div>
+          <a class="btn btn-primary btn-block" data-wa="plava" target="_blank" rel="noopener">Naruči na WhatsApp</a>
+          <a class="btn btn-secondary btn-block" href="#paketi" style="margin-top:10px;">Naruči</a>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ================= 5. PRIMJENA ================= -->
+  <section class="s-primjena">
+    <div class="section-head" data-reveal>
+      <span class="tag tag-accent">Za koga</span>
+      <h2>Primjeri primjene</h2>
+      <p>Recenzije su ključne za rejting i vidljivost na Googleu — u svakoj branši gdje ljudi biraju očima.</p>
+    </div>
+    <div class="grid grid-primjena" data-reveal>
+      <div class="card">
+        <h3 class="card-title">Turizam i izleti</h3>
+        <p class="card-body">Skupi recenzije dok su gosti još pod dojmom doživljaja.</p>
+      </div>
+      <div class="card">
+        <h3 class="card-title">Restorani i kafići</h3>
+        <p class="card-body">Kartica na stolu ili uz račun — recenzija prije nego gost ode.</p>
+      </div>
+      <div class="card">
+        <h3 class="card-title">Hoteli i smještaj</h3>
+        <p class="card-body">Na recepciji ili u sobi — jednostavno za svakog gosta.</p>
+      </div>
+      <div class="card">
+        <h3 class="card-title">Ljepota i wellness</h3>
+        <p class="card-body">Frizeri, saloni, spa — zadovoljan klijent, jedan dodir.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= 6. PAKETI ================= -->
+  <section class="s-paketi" id="paketi">
+    <div class="section-head" style="max-width:680px;" data-reveal>
+      <span class="tag tag-accent">Količinski popust</span>
+      <h2>Više kartica, niža cijena</h2>
+      <p>Slobodno miješaj crne i plave kartice u paketu — npr. 5 crnih i 5 plavih. Cijena vrijedi bez obzira na kombinaciju boja.</p>
+    </div>
+
+    <div class="grid grid-paketi" data-reveal>
+      <div class="card pkg-card">
+        <span class="card-kicker">1 kartica</span>
+        <div class="pkg-figure">20&nbsp;€</div>
+        <p class="card-body" style="color:color-mix(in srgb, var(--color-text) 60%, transparent);">20 € po kartici</p>
+        <a class="btn btn-secondary btn-block" data-wa="pkg1" target="_blank" rel="noopener">Naruči</a>
+      </div>
+
+      <div class="card pkg-card">
+        <span class="card-kicker">5 kartica</span>
+        <div class="pkg-figure">75&nbsp;€</div>
+        <p class="card-body save">15 € po kartici · ušteda 25 €</p>
+        <a class="btn btn-secondary btn-block" data-wa="pkg5" target="_blank" rel="noopener">Naruči</a>
+      </div>
+
+      <div class="card pkg-card pkg-card--featured">
+        <span class="tag tag-accent pkg-badge">Najpopularnije</span>
+        <span class="card-kicker">10 kartica</span>
+        <div class="pkg-figure">120&nbsp;€</div>
+        <p class="card-body save">12 € po kartici · ušteda 80 €</p>
+        <a class="btn btn-primary btn-block" data-wa="pkg10" target="_blank" rel="noopener">Naruči</a>
+      </div>
+
+      <div class="card pkg-card">
+        <span class="card-kicker">10+ kartica</span>
+        <div class="pkg-figure is-small">Popust po<br>dogovoru</div>
+        <p class="card-body save">Što veća količina, to veći popust po kartici.</p>
+        <a class="btn btn-secondary btn-block" data-wa="pkg20" target="_blank" rel="noopener">Zatraži ponudu</a>
+      </div>
+    </div>
+
+    <!-- ---------- Kalkulator uštede ---------- -->
+    <div class="calc" data-reveal>
+      <div class="calc-top">
+        <h3>Izračunaj svoju cijenu</h3>
+        <span class="calc-qty"><b id="calcQty">10</b> kartica</span>
+      </div>
+
+      <label class="visually-hidden" for="calcRange">Broj kartica</label>
+      <input type="range" id="calcRange" min="1" max="50" value="10" step="1">
+      <div class="calc-scale"><span>1</span><span>25</span><span>50</span></div>
+
+      <div class="calc-out">
+        <div class="calc-cell">
+          <span class="label">Ukupno</span>
+          <span class="value" id="calcTotal">120 €</span>
+        </div>
+        <div class="calc-cell">
+          <span class="label">Po kartici</span>
+          <span class="value" id="calcUnit">12 €</span>
+        </div>
+        <div class="calc-cell">
+          <span class="label">Ušteda</span>
+          <span class="value is-save" id="calcSave">80 €</span>
+        </div>
+      </div>
+
+      <p class="calc-note" id="calcNote"></p>
+      <a class="btn btn-primary btn-block" id="calcCta" target="_blank" rel="noopener">Naruči na WhatsApp</a>
+    </div>
+  </section>
+
+  <!-- ================= DOKAZI =================
+       ⚠️ Brojke i imena NISU stvarni. Struktura je spremna, sadržaj čeka
+       podatke od klijenta. Ukloniti klasu .needs-data i data-placeholder
+       atribute tek kad se upišu stvarne vrijednosti.
+  -->
+  <section class="s-dokazi">
+    <div class="needs-data" data-reveal>
+      <div class="section-head">
+        <span class="tag tag-outline">Rezervirano</span>
+        <h2>Brojke koje uvjeravaju</h2>
+        <p>Ovdje idu stvarne brojke — koliko je kartica isporučeno, koliko poslovnih korisnika ih koristi i koliko recenzija su donijele. Zamijeni vrijednosti u <code>data-value</code> atributima i ukloni ovaj okvir.</p>
+      </div>
+      <div class="stats">
+        <div>
+          <span class="stat-number" data-value="0" data-decimals="0" data-placeholder="true">0</span><span class="stat-suffix">+</span>
+          <span class="stat-label">isporučenih kartica</span>
+        </div>
+        <div>
+          <span class="stat-number" data-value="0" data-decimals="0" data-placeholder="true">0</span><span class="stat-suffix">+</span>
+          <span class="stat-label">poslovnih korisnika</span>
+        </div>
+        <div>
+          <span class="stat-number" data-value="0" data-decimals="0" data-placeholder="true">0</span><span class="stat-suffix">+</span>
+          <span class="stat-label">prikupljenih recenzija</span>
+        </div>
+        <div>
+          <span class="stat-number" data-value="0" data-decimals="0" data-placeholder="true">0</span><span class="stat-suffix">dana</span>
+          <span class="stat-label">rok isporuke</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= 7. NAPREDNI SUSTAV ================= -->
+  <section class="s-sustav" id="sustav">
+    <div class="s-sustav-inner">
+
+      <div class="section-head" data-reveal>
+        <span class="tag tag-ghost">Drugi dio ponude</span>
+        <h2>Napredni NFC sustav</h2>
+        <p>Filtar zadovoljstva prije recenzije i praćenje po djelatniku. Nezadovoljni gost ide na privatnu formu — ne na javnu recenziju. Ti dobivaš uvid, a Google profil čistu peticu.</p>
+      </div>
+
+      <div class="flow" data-reveal>
+        <div class="flow-tile">
+          <span class="kicker">Korak 1</span>
+          <h3>Gost skenira karticu</h3>
+          <p>Svaki djelatnik ima svoju karticu.</p>
+        </div>
+        <div class="flow-tile">
+          <span class="kicker">Korak 2</span>
+          <h3>„Jeste li zadovoljni?”</h3>
+          <p>Kratko pitanje prije bilo kakve recenzije.</p>
+        </div>
+        <div class="flow-tile flow-tile--yes">
+          <span class="kicker">Ako DA →</span>
+          <h3>Google recenzija</h3>
+          <p>Vodi ga ravno na javni Google profil.</p>
+        </div>
+        <div class="flow-tile flow-tile--no">
+          <span class="kicker">Ako NE →</span>
+          <h3>Privatna forma gazdi</h3>
+          <p>Pritužba ide direktno tebi — ne na Google.</p>
+        </div>
+      </div>
+
+      <!-- ---------- Živi demo filtra ---------- -->
+      <div class="demo" data-reveal>
+        <div class="demo-head">
+          <h3>Probaj kako to vidi tvoj gost</h3>
+          <span class="demo-badge">Demo — ništa se ne šalje</span>
+        </div>
+        <div class="demo-screen" id="demoScreen" aria-live="polite"></div>
+      </div>
+
+      <div class="features" data-reveal>
+        <div>
+          <h3>Kartica po djelatniku</h3>
+          <p>Svaki radnik dobiva svoju NFC karticu.</p>
+        </div>
+        <div>
+          <h3>Uvid za gazdu</h3>
+          <p>Vidiš tko je donio koliko recenzija.</p>
+        </div>
+        <div>
+          <h3>Čuva rejting</h3>
+          <p>Negativni dojmovi ostaju privatni.</p>
+        </div>
+      </div>
+
+      <div class="sustav-cta" data-reveal>
+        <a class="btn btn-inverted" data-wa="sustav" target="_blank" rel="noopener">Zatraži ponudu</a>
+        <span class="sustav-note">Cijena naprednog sustava na upit — javi nam se za personaliziranu ponudu.</span>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ================= 8. ZAKLJUČNI CTA ================= -->
+  <section class="s-kontakt" id="kontakt">
+    <div class="s-kontakt-inner" data-reveal>
+      <h2>Spreman za više recenzija?</h2>
+      <p class="lead">Naruči kartice ili zatraži ponudu za napredni sustav — javi nam se na WhatsApp i kreni odmah.</p>
+      <a class="btn btn-primary" data-wa="close" target="_blank" rel="noopener">Piši nam na WhatsApp</a>
+      <p class="note">Odgovaramo u pravilu isti dan · reviewcard.hr</p>
+    </div>
+  </section>
+
+  <!-- ================= 9. FOOTER ================= -->
+  <footer class="site-footer">
+    <span>© 2026 reviewcard.hr</span>
+    <span>NFC Google review kartice · Hrvatska</span>
+  </footer>
+
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/lenis@1/dist/lenis.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/gsap@3/dist/gsap.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/gsap@3/dist/ScrollTrigger.min.js"></script>
+<script src="js/app.js"></script>
+</body>
+</html>

@@ -1,0 +1,15 @@
+# ovisnosti (projekt ih nema, ali za svaki slučaj)
+node_modules/
+
+# OS smeće
+Thumbs.db
+desktop.ini
+.DS_Store
+
+# uređivači
+.vscode/
+.idea/
+
+# izvorni video se NE šalje — 12 MB, a frameovi su već izvučeni u frames/
+*.mov
+*.mp4
