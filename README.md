@@ -40,15 +40,18 @@ Bez buildera i bez ovisnosti. GSAP, ScrollTrigger i Lenis učitavaju se s CDN-a.
 
 ## Uvodna animacija
 
-Frameovi su izvučeni iz uspravnog videa (1080×1920, 16,8 s):
+Frameovi su izvučeni iz uspravnog videa (1080×1920, 16,8 s) u punoj
+rezoluciji:
 
 ```bash
-ffmpeg -i video.mov -vf "fps=12,scale=720:-1" -c:v libwebp -quality 60 \
+ffmpeg -i video.mov -vf "fps=12" -c:v libwebp -quality 82 \
   "frames/frame_%04d.webp"
 ```
 
-201 frame, 7,71 MB. Vezani su na skrol kroz blok visok 440vh (360vh na
-mobitelu). Ako se video mijenja, uskladiti `FRAME_COUNT` u `js/app.js`.
+201 frame, ~19 MB. Vezani su na skrol kroz blok visok 440vh (360vh na
+mobitelu). Na mobitelu animacija zauzima cijeli ekran (ispod izbornika) i
+nema nikakvog teksta; na desktopu je video u okviru telefona u sredini.
+Ako se video mijenja, uskladiti `FRAME_COUNT` u `js/app.js`.
 
 Detalji koje je lako slomiti pri izmjenama:
 

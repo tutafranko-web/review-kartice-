@@ -287,16 +287,15 @@ section[id] { scroll-margin-top: 84px; }
 
 /* Lijepi se ISPOD izbornika (top: --nav-h) i visinu si uzima kao ostatak
    ekrana. Time video nikad ne ulazi pod izbornik, a blok ne prelije dno
-   ekrana ni prije nego se zalijepi — što je bilo vidljivo u landscapeu. */
+   ekrana ni prije nego se zalijepi. Bez teksta — samo video u sredini. */
 .intro-sticky {
   position: sticky;
   top: var(--nav-h);
   height: calc(100vh - var(--nav-h));
   padding-bottom: 18px;
-  display: grid;
-  grid-template-columns: 1fr auto 1fr;
+  display: flex;
   align-items: center;
-  gap: clamp(20px, 4vw, 56px);
+  justify-content: center;
   overflow: hidden;
 }
 
@@ -314,17 +313,11 @@ section[id] { scroll-margin-top: 84px; }
 
 .intro-stage {
   position: relative;
-  /* eksplicitno u srednji stupac prvog reda — bez ovoga auto-placement
-     gura treću poruku (isti stupac kao prva) u drugi red gdje je
-     overflow: hidden odreže */
-  grid-column: 2;
-  grid-row: 1;
   /* ograničen VISINOM da uvijek cijeli stane ispod izbornika,
      širina se izvodi iz omjera videa */
   height: min(74vh, calc(100vh - var(--nav-h) - 40px), 680px);
   width: auto;
-  aspect-ratio: 720 / 1280;
-  will-change: transform;
+  aspect-ratio: 9 / 16;
   border-radius: 28px;
   overflow: hidden;
   background: #0e1020;
@@ -359,52 +352,6 @@ section[id] { scroll-margin-top: 84px; }
   transition: width .2s ease;
 }
 .intro-stage.is-ready .intro-loader { opacity: 0; }
-
-/* poruke sa strane */
-.intro-msg {
-  opacity: 0;
-  will-change: opacity, transform;
-}
-/* sve poruke dijele isti red i preklapaju se — u svakom trenutku je
-   vidljiva samo jedna, pa preklapanje nikoga ne smeta */
-.intro-msg[data-side="left"]  { grid-column: 1; grid-row: 1; text-align: right; justify-self: end; }
-.intro-msg[data-side="right"] { grid-column: 3; grid-row: 1; text-align: left;  justify-self: start; }
-
-.intro-msg-inner { max-width: 22ch; }
-
-.intro-msg .kicker {
-  display: block;
-  font-size: 12px;
-  text-transform: uppercase;
-  letter-spacing: .08em;
-  color: var(--color-accent);
-  margin-bottom: 12px;
-}
-
-.intro-msg h2 {
-  font-size: clamp(24px, 3vw, 40px);
-  line-height: 1.1;
-  letter-spacing: -0.02em;
-}
-
-.intro-msg p {
-  font-size: 15px;
-  line-height: 1.6;
-  margin-top: 12px;
-  color: color-mix(in srgb, var(--color-text) 70%, transparent);
-}
-
-/* pokazivač skrola */
-.intro-hint {
-  position: absolute;
-  left: 50%; bottom: 26px;
-  transform: translateX(-50%);
-  font-size: 12px;
-  letter-spacing: .08em;
-  text-transform: uppercase;
-  color: color-mix(in srgb, var(--color-text) 45%, transparent);
-  animation: rc-hint 2.4s ease-in-out infinite;
-}
 
 /* =========================================================================
    2. Hero
@@ -983,8 +930,6 @@ section[id] { scroll-margin-top: 84px; }
 @keyframes rc-float2 { 0%,100% { transform: translateY(0); }   50% { transform: translateY(-18px); } }
 @keyframes rc-pulse  { 0%,100% { opacity: .35; transform: translate(-50%,-50%) scale(1); }
                        50%     { opacity: .7;  transform: translate(-50%,-50%) scale(1.06); } }
-@keyframes rc-hint   { 0%,100% { transform: translate(-50%, 0); opacity: .5; }
-                       50%     { transform: translate(-50%, 6px); opacity: 1; } }
 
 /* oba sjaja su sada centrirana preko top/left 50% pa dijele isti rc-pulse
    koji u sebi nosi translate(-50%, -50%) */
@@ -1000,60 +945,41 @@ section[id] { scroll-margin-top: 84px; }
   .card-tile--black { margin-bottom: 36px; }
   .card-tile--blue  { margin-top: 36px; }
 
-  /* uvodna animacija: video gore, tekst ispod — oboje ispod izbornika */
-  .intro { height: 360vh; }
-  .intro-sticky {
-    grid-template-columns: 1fr;
-    grid-template-rows: auto auto;
-    align-content: center;
-    gap: 20px;
-    padding: 0 var(--page-gutter) 16px;
+  /* uvodna animacija: video preko CIJELOG ekrana (ispod izbornika),
+     od ruba do ruba — bez okvira telefona, bez sjaja, bez teksta */
+  .intro {
+    height: 360vh;
+    /* probij page gutter da video ide od ruba do ruba */
+    margin-left: calc(-1 * var(--page-gutter));
+    margin-right: calc(-1 * var(--page-gutter));
   }
+  .intro-sticky { padding: 0; }
   .intro-stage {
-    height: min(54vh, calc(100vh - var(--nav-h) - 180px), 500px);
-    width: auto;
-    justify-self: center;
-    /* mora se vratiti u stupac 1 — osnovno pravilo ga stavlja u stupac 2,
-       što bi ovdje stvorilo nepostojeći drugi stupac */
-    grid-column: 1;
-    grid-row: 1;
+    width: 100%;
+    height: 100%;
+    aspect-ratio: auto;
+    border-radius: 0;
+    box-shadow: none;
   }
-  .intro-msg,
-  .intro-msg[data-side="left"],
-  .intro-msg[data-side="right"] {
-    grid-column: 1;
-    grid-row: 2;
-    text-align: center;
-    justify-self: center;
-  }
-  .intro-msg-inner { max-width: 30ch; }
-  .intro-glow { width: 420px; height: 420px; }
+  .intro-glow { display: none; }
 }
 
-/* Mobitel u landscapeu: ekran je nizak i širok. Slaganje video-pa-tekst
-   ostavilo bi video visok ~110px, pa se vraćamo na bočni raspored
-   (tekst | video | tekst) i visinu vežemo za ono čega ima najmanje. */
+/* Mobitel u landscapeu: video isto preko cijelog ekrana */
 @media (max-height: 560px) and (orientation: landscape) {
-  .intro { height: 380vh; }
-  .intro-sticky {
-    grid-template-columns: 1fr auto 1fr;
-    grid-template-rows: 1fr;
-    padding: 0 var(--page-gutter) 12px;
-    gap: clamp(14px, 3vw, 32px);
+  .intro {
+    height: 380vh;
+    margin-left: calc(-1 * var(--page-gutter));
+    margin-right: calc(-1 * var(--page-gutter));
   }
+  .intro-sticky { padding: 0; }
   .intro-stage {
-    height: min(calc(100vh - var(--nav-h) - 30px), 420px);
-    width: auto;
-    grid-row: 1;
-    grid-column: 2;
+    width: 100%;
+    height: 100%;
+    aspect-ratio: auto;
+    border-radius: 0;
+    box-shadow: none;
   }
-  .intro-msg[data-side="left"]  { grid-column: 1; grid-row: 1; text-align: right; justify-self: end; }
-  .intro-msg[data-side="right"] { grid-column: 3; grid-row: 1; text-align: left;  justify-self: start; }
-  .intro-msg-inner { max-width: 20ch; }
-  .intro-msg h2 { font-size: clamp(17px, 3.4vw, 26px); }
-  .intro-msg p  { font-size: 13px; margin-top: 8px; }
-  .intro-glow { width: 300px; height: 300px; }
-  .intro-hint { display: none; }
+  .intro-glow { display: none; }
 }
 
 @media (max-width: 760px) {
@@ -1084,27 +1010,19 @@ section[id] { scroll-margin-top: 84px; }
   .card-tile--black,
   .card-tile--blue,
   .hero-art-glow,
-  .intro-glow,
-  .intro-hint { animation: none; }
+  .intro-glow { animation: none; }
 
   /* animacija se svede na jedan ekran sa statičnim kadrom */
-  .intro { height: auto; }
+  .intro { height: auto; margin-left: 0; margin-right: 0; }
   .intro-sticky {
     position: static;
     height: auto;
     padding: 48px 0;
-    grid-template-columns: 1fr;
-    gap: 24px;
-    justify-items: center;
-    text-align: center;
   }
-  .intro-msg,
-  .intro-msg[data-side="left"],
-  .intro-msg[data-side="right"] {
-    opacity: 1 !important;
-    transform: none !important;
-    grid-column: 1;
-    text-align: center;
+  .intro-stage {
+    width: min(70vw, 300px);
+    height: auto;
+    aspect-ratio: 9 / 16;
+    border-radius: 28px;
   }
-  .intro-stage { width: min(70vw, 300px); height: auto; }
 }

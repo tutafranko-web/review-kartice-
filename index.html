@@ -32,50 +32,17 @@
   </nav>
 
   <!-- ================= 1. UVODNA SCROLL ANIMACIJA =================
-       Zamjenjuje rezervirani blok iz prototipa. Kadrovi dolaze iz videa
-       snimljenog na brodu: ugođaj → kartica na ručniku → dodir → Google
-       recenzija s 5 zvjezdica.
+       Samo video, bez ikakvog teksta. Na mobitelu zauzima cijeli ekran
+       (ispod izbornika), na desktopu je telefon u sredini.
   -->
   <section class="intro" id="uvod" aria-label="Kako kartica radi">
     <div class="intro-sticky">
       <div class="intro-glow" aria-hidden="true"></div>
-
-      <!-- poruka 1 (lijevo) -->
-      <div class="intro-msg" data-side="left" data-from="0" data-to="33" data-anim="slide-left">
-        <div class="intro-msg-inner">
-          <span class="kicker">01</span>
-          <h2>Kartica stoji uz gosta</h2>
-          <p>Na šanku, stolu ili ležaljci — tamo gdje je gostu na dohvat ruke.</p>
-        </div>
-      </div>
-
-      <!-- scena -->
       <div class="intro-stage" id="introStage">
         <img class="intro-poster" id="introPoster" src="frames/frame_0001.webp" alt="Kartica za Google recenzije u upotrebi na brodu">
         <canvas id="introCanvas"></canvas>
         <div class="intro-loader" id="introLoader"><span></span></div>
       </div>
-
-      <!-- poruka 2 (desno) -->
-      <div class="intro-msg" data-side="right" data-from="33" data-to="66" data-anim="slide-right">
-        <div class="intro-msg-inner">
-          <span class="kicker">02</span>
-          <h2>Jedan dodir telefonom</h2>
-          <p>NFC čip radi bez aplikacije. Telefon odmah prepozna karticu.</p>
-        </div>
-      </div>
-
-      <!-- poruka 3 (lijevo) — to=101 jer progres 1.0 pada točno u trenutku
-           otpuštanja kadra; poruka tako ostaje do same predaje heroju -->
-      <div class="intro-msg" data-side="left" data-from="66" data-to="101" data-anim="fade-up">
-        <div class="intro-msg-inner">
-          <span class="kicker">03</span>
-          <h2>Pet zvjezdica, bez tipkanja</h2>
-          <p>Google profil se otvara sam — gostu ostaje samo ocijeniti.</p>
-        </div>
-      </div>
-
-      <span class="intro-hint" id="introHint">Skrolaj</span>
     </div>
   </section>
 

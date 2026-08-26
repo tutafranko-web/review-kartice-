@@ -122,7 +122,8 @@ function initLenis() {
 
 /* =========================================================================
    4. Uvodna scroll animacija
-   201 framea iz videa, vezanih na skrol kroz 300vh visok blok.
+   201 framea u punoj rezoluciji videa (1080x1920), vezanih na skrol.
+   Bez teksta — samo video.
    ========================================================================= */
 
 const FRAME_COUNT = 201;
@@ -138,7 +139,6 @@ function initIntro() {
   const stage  = document.getElementById("introStage");
   const canvas = document.getElementById("introCanvas");
   const loader = document.getElementById("introLoader");
-  const hint   = document.getElementById("introHint");
   if (!stage || !canvas) return;
 
   const ctx = canvas.getContext("2d", { alpha: false });
@@ -163,7 +163,8 @@ function initIntro() {
     if (currentKey >= 0) draw(currentKey);
   }
 
-  /* --- crtanje: cover, jer je stage istog omjera kao video --- */
+  /* --- crtanje: cover — na mobitelu stage nije istog omjera kao video,
+     pa se video simetrično obreže da ispuni cijeli ekran --- */
   function draw(key) {
     const img = frames.get(key);
     if (!img) return;
@@ -234,73 +235,15 @@ function initIntro() {
   window.addEventListener("resize", sizeCanvas);
   preload();
 
-  if (REDUCED_MOTION || typeof ScrollTrigger === "undefined") {
-    if (hint) hint.style.display = "none";
-    return;
-  }
-
-  const section = document.querySelector(".intro");
+  if (REDUCED_MOTION || typeof ScrollTrigger === "undefined") return;
 
   ScrollTrigger.create({
-    trigger: section,
+    trigger: document.querySelector(".intro"),
     start: "top top",
     end: "bottom bottom",
     scrub: true,
-    onUpdate: self => {
-      const p = self.progress;
-      renderAt(p);
-      /* filmski ulaz: telefon naraste s 94% na 100% u prvih 6% skrola */
-      const s = 0.94 + 0.06 * Math.min(p / 0.06, 1);
-      stage.style.transform = `scale(${s.toFixed(4)})`;
-      /* visibility umjesto opacity — opacity bi pregazila rc-hint animacija */
-      if (hint) hint.style.visibility = p > 0.04 ? "hidden" : "";
-    }
+    onUpdate: self => renderAt(self.progress)
   });
-
-  /* --- poruke sa strane, svaka s drugom ulaznom animacijom --- */
-  const messages = [];
-
-  document.querySelectorAll(".intro-msg").forEach(msg => {
-    const from = parseFloat(msg.dataset.from) / 100;
-    const to   = parseFloat(msg.dataset.to) / 100;
-    const anim = msg.dataset.anim;
-
-    const START = { opacity: 0 };
-    if (anim === "slide-left")  START.x = -70;
-    if (anim === "slide-right") START.x = 70;
-    if (anim === "fade-up")     START.y = 50;
-
-    gsap.set(msg, START);
-
-    const tl = gsap.timeline({ paused: true });
-    tl.to(msg, { opacity: 1, x: 0, y: 0, duration: .55, ease: "power3.out" });
-
-    messages.push({ from, to, tl, visible: false });
-  });
-
-  /* Jedan ScrollTrigger za sve poruke — jeftinije od tri, i lakše ga je
-     ručno sinkronizirati. */
-  function syncMessages(p) {
-    messages.forEach(m => {
-      const should = p >= m.from && p < m.to;
-      if (should && !m.visible)      { m.visible = true;  m.tl.play(); }
-      else if (!should && m.visible) { m.visible = false; m.tl.reverse(); }
-    });
-  }
-
-  const msgTrigger = ScrollTrigger.create({
-    trigger: section,
-    start: "top top",
-    end: "bottom bottom",
-    scrub: true,
-    onUpdate: self => syncMessages(self.progress)
-  });
-
-  /* onUpdate ne okine dok se stvarno ne skrola, pa bi prva poruka na
-     dolasku na stranicu ostala nevidljiva. Sinkroniziramo ručno — i pri
-     svakom refreshu (rotacija ekrana, promjena visine). */
-  syncMessages(msgTrigger.progress || 0);
-  ScrollTrigger.addEventListener("refresh", () => syncMessages(msgTrigger.progress || 0));
 }
 
 /* =========================================================================
