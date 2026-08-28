@@ -48,8 +48,8 @@ ffmpeg -i video.mov -vf "fps=12" -c:v libwebp -quality 82 \
   "frames/frame_%04d.webp"
 ```
 
-201 frame, ~19 MB. Vezani su na skrol kroz blok visok 440vh (360vh na
-mobitelu). Na mobitelu animacija zauzima cijeli ekran (ispod izbornika) i
+201 frame, ~19 MB. Vezani su na skrol kroz blok visok 250vh (200vh na
+mobitelu) — visina bloka izravno određuje brzinu animacije. Na mobitelu animacija zauzima cijeli ekran (ispod izbornika) i
 nema nikakvog teksta; na desktopu je video u okviru telefona u sredini.
 Ako se video mijenja, uskladiti `FRAME_COUNT` u `js/app.js`.
 

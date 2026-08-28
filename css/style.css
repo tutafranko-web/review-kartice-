@@ -281,8 +281,8 @@ section[id] { scroll-margin-top: 84px; }
 
 .intro {
   position: relative;
-  /* visina = trajanje skrola; 440vh ≈ 4,4 ekrana animacije */
-  height: 440vh;
+  /* visina = trajanje skrola; manja visina = brža animacija */
+  height: 250vh;
 }
 
 /* Lijepi se ISPOD izbornika (top: --nav-h) i visinu si uzima kao ostatak
@@ -948,7 +948,7 @@ section[id] { scroll-margin-top: 84px; }
   /* uvodna animacija: video preko CIJELOG ekrana (ispod izbornika),
      od ruba do ruba — bez okvira telefona, bez sjaja, bez teksta */
   .intro {
-    height: 360vh;
+    height: 200vh;
     /* probij page gutter da video ide od ruba do ruba */
     margin-left: calc(-1 * var(--page-gutter));
     margin-right: calc(-1 * var(--page-gutter));
@@ -967,7 +967,7 @@ section[id] { scroll-margin-top: 84px; }
 /* Mobitel u landscapeu: video isto preko cijelog ekrana */
 @media (max-height: 560px) and (orientation: landscape) {
   .intro {
-    height: 380vh;
+    height: 220vh;
     margin-left: calc(-1 * var(--page-gutter));
     margin-right: calc(-1 * var(--page-gutter));
   }
