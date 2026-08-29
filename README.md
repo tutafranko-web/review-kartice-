@@ -58,6 +58,17 @@ vidljiva.
 
 **Nagib kartica** — slike proizvoda prate pokazivač (samo uređaji s mišem).
 
+**Demo filtra zadovoljstva** (`#sustav`) — nije slika nego obrazac koji radi.
+Tok: pokreni → „Jeste li zadovoljni?" → DA vodi na Google obrazac, NE na
+privatnu formu. U obje grane zvjezdice su pravi gumbi, tekst se stvarno
+upisuje, a gumb za slanje vodi na ekran potvrde koji prikaže upravo ono što
+je upisano. Ocjena i tekst pamte se po grani (`state` u `initDemo`) pa se ne
+gube pri skakanju između DA i NE.
+
+Ništa se ne šalje niti izlazi iz stranice — oznaka „Demo — ništa se ne šalje"
+stoji u zaglavlju, a obje potvrde to ponavljaju. Adresa
+`vlasnik@tvojobrt.hr` je ilustrativna i treba je zamijeniti pravom.
+
 Detalji koje je lako slomiti pri izmjenama:
 
 - `body` **ne smije** imati `overflow-x: hidden` — pretvara body u scroll
@@ -67,6 +78,15 @@ Detalji koje je lako slomiti pri izmjenama:
   uvijek ostaje razmak iznad kartice; s translateY telefon prekrije karticu
   i izgubi se poanta da je *prislanja na* nešto.
 - Visina `.s-kako` (300vh) određuje koliko skrola traje sekvenca.
+- Sadržaj prikovanog okvira **mora stati** u `calc(100vh - var(--nav-h))` jer
+  `.kako-sticky` ima `overflow: hidden`. Na niskim ekranima to je tijesno pa
+  postoje dva stupnja: ispod 860px visine scena i razmaci se stisnu, a ispod
+  720px (portrait) prikazuje se opis samo aktivnog koraka. Uvijek je otvoren
+  točno jedan opis pa visina liste ostaje ista i raspored ne poskakuje. Ako
+  se mijenja tekst koraka ili veličina scene, provjeriti da 3. korak
+  („Otvara se recenzija") nije odrezan na 375×667.
+- U demou se ocjena mijenja **na mjestu**, bez ponovnog crtanja ekrana —
+  inače tekst u polju i fokus odlete pri svakom kliku na zvjezdicu.
 
 ## Dizajn
 

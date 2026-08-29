@@ -349,11 +349,35 @@ function initDemo() {
   const screen = document.getElementById("demoScreen");
   if (!screen) return;
 
+  /* Ocjena i tekst pamte se po grani da se ne izgube kad vlasnik
+     skače između DA i NE. Ništa od ovoga ne izlazi iz stranice. */
+  const state = {
+    yes: { rating: 5, text: "Odlična usluga, sve pohvale!" },
+    no:  { rating: 2, text: "Čekali smo predugo za stolom." }
+  };
+
+  const esc = s => String(s).replace(/[&<>"]/g,
+    c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
+
+  /* Zvjezdice su pravi gumbi — klikom se mijenja ocjena. */
+  const rate = (branch, tone) => {
+    const n = state[branch].rating;
+    let h = `<div class="rate rate--${tone}" role="group" aria-label="Ocjena, 1 do 5">`;
+    for (let i = 1; i <= 5; i++) {
+      h += `<button type="button" class="rate-star${i <= n ? " is-on" : ""}"` +
+           ` data-rate="${i}" data-branch="${branch}"` +
+           ` aria-label="Ocijeni ${i} od 5"${i === n ? ' aria-current="true"' : ""}>★</button>`;
+    }
+    return h + `<span class="rate-out" data-out="${branch}">${n}/5</span></div>`;
+  };
+
+  const stars = n => "★".repeat(n) + "☆".repeat(5 - n);
+
   const views = {
     start: () => `
       <div class="demo-step">
         <h4>Gost je upravo prislonio telefon</h4>
-        <p>Prije nego dođe do Googlea, sustav postavi jedno pitanje. Klikni kao da si gost.</p>
+        <p>Prije nego dođe do Googlea, sustav postavi jedno pitanje. Klikni kao da si gost — sve je klikabilno.</p>
         <div class="demo-actions">
           <button class="demo-btn demo-btn--ghost" data-go="ask">Pokreni demo</button>
         </div>
@@ -362,15 +386,15 @@ function initDemo() {
     ask: () => `
       <div class="demo-step">
         <h4>„Jeste li zadovoljni?”</h4>
-        <p>Kratko pitanje prije bilo kakve recenzije.</p>
+        <p>Kratko pitanje prije bilo kakve recenzije. Odgovor odlučuje gdje gost ide dalje.</p>
         <div class="demo-actions">
           <button class="demo-btn demo-btn--yes" data-go="yes">Da, zadovoljan sam</button>
           <button class="demo-btn demo-btn--no" data-go="no">Ne baš</button>
         </div>
       </div>`,
 
-    /* Maketa javne Google recenzije. Statična — ništa se ne upisuje
-       ni ne šalje, služi samo da vlasnik vidi što gost dobije. */
+    /* Grana DA: javni Google obrazac. Ocjena i tekst se stvarno mijenjaju,
+       ali gumb samo prelazi na potvrdu — ništa se ne objavljuje. */
     yes: () => `
       <div class="demo-step demo-step--wide">
         <div class="mock mock--google">
@@ -384,20 +408,22 @@ function initDemo() {
               <span class="mock-logo">G</span>
               <span class="mock-title">Tvoj obrt</span>
             </div>
-            <div class="mock-stars mock-stars--full">★★★★★</div>
-            <div class="mock-text">Odlična usluga, sve pohvale!</div>
-            <div class="mock-send mock-send--google">Objavi na Googleu</div>
+            ${rate("yes", "light")}
+            <textarea class="mock-input mock-input--light" data-field data-branch="yes"
+              rows="2" aria-label="Tekst recenzije"
+              placeholder="Napiši recenziju…">${esc(state.yes.text)}</textarea>
+            <button type="button" class="mock-send mock-send--google" data-send="yes">Objavi na Googleu</button>
           </div>
         </div>
-        <p class="demo-note">Zadovoljan gost ide ravno na tvoj javni Google profil i ostavlja peticu.</p>
+        <p class="demo-note">Zadovoljan gost ide ravno na tvoj javni Google profil. Promijeni ocjenu i tekst pa pritisni gumb.</p>
         <span class="demo-outcome demo-outcome--yes">Javno na Googleu · diže ti rejting</span>
         <div class="demo-actions">
           <button class="demo-btn demo-btn--ghost" data-go="no">Vidi što se dogodi ako NE</button>
         </div>
       </div>`,
 
-    /* Maketa privatne forme koja ide vlasniku na mail. Naglašeno je da
-       ovo NIJE Google: druga traka, adresa primatelja, oznaka Privatno. */
+    /* Grana NE: privatna forma vlasniku. Naglašeno je da ovo NIJE Google —
+       druga traka, adresa primatelja i oznaka Privatno. */
     no: () => `
       <div class="demo-step demo-step--wide">
         <div class="mock mock--mail">
@@ -413,19 +439,73 @@ function initDemo() {
             </div>
             <div class="mock-row">
               <span class="mock-label">Ocjena</span>
-              <span class="mock-stars mock-stars--low">★★☆☆☆</span>
+              ${rate("no", "dark")}
             </div>
             <div class="mock-row mock-row--stack">
               <span class="mock-label">Što nije bilo u redu?</span>
-              <div class="mock-area">Čekali smo predugo za stolom.</div>
+              <textarea class="mock-input mock-input--dark" data-field data-branch="no"
+                rows="2" aria-label="Opis problema"
+                placeholder="Opiši što nije bilo u redu…">${esc(state.no.text)}</textarea>
             </div>
-            <div class="mock-send mock-send--mail">Pošalji vlasniku</div>
+            <button type="button" class="mock-send mock-send--mail" data-send="no">Pošalji vlasniku</button>
           </div>
         </div>
         <p class="demo-note">Nezadovoljan gost piše tebi na mail, a ne Googleu. Saznaješ što ne valja i imaš priliku popraviti — bez javne jedinice.</p>
         <span class="demo-outcome demo-outcome--no">Stiže ti na mail · ne pojavljuje se javno</span>
         <div class="demo-actions">
           <button class="demo-btn demo-btn--ghost" data-go="yes">Vidi što se dogodi ako DA</button>
+        </div>
+      </div>`,
+
+    yesDone: () => `
+      <div class="demo-step demo-step--wide">
+        <div class="mock mock--google">
+          <div class="mock-bar">
+            <span class="mock-dot"></span>
+            <span class="mock-url">google.com/maps</span>
+            <span class="mock-tag mock-tag--public">Javno</span>
+          </div>
+          <div class="mock-body mock-body--done">
+            <span class="done-mark done-mark--yes">✓</span>
+            <h5 class="done-title done-title--light">Recenzija je objavljena</h5>
+            <div class="done-quote done-quote--light">
+              <div class="done-stars done-stars--yes">${stars(state.yes.rating)}</div>
+              <p>${esc(state.yes.text) || "<em>bez teksta</em>"}</p>
+            </div>
+            <p class="done-meta">Vidljiva svima na tvom Google profilu i ulazi u prosjek ocjene.</p>
+          </div>
+        </div>
+        <p class="demo-note">Ovako izgleda kad gost potvrdi. U demou se ništa ne objavljuje.</p>
+        <span class="demo-outcome demo-outcome--yes">Javno na Googleu · diže ti rejting</span>
+        <div class="demo-actions">
+          <button class="demo-btn demo-btn--no" data-go="no">Probaj granu NE</button>
+          <button class="demo-btn demo-btn--ghost" data-go="start">Ispočetka</button>
+        </div>
+      </div>`,
+
+    noDone: () => `
+      <div class="demo-step demo-step--wide">
+        <div class="mock mock--mail">
+          <div class="mock-bar">
+            <span class="mock-lock">🔒</span>
+            <span class="mock-url">privatna forma — ne ide na Google</span>
+            <span class="mock-tag mock-tag--private">Privatno</span>
+          </div>
+          <div class="mock-body mock-body--done">
+            <span class="done-mark done-mark--no">✓</span>
+            <h5 class="done-title">Poruka je stigla tebi na mail</h5>
+            <div class="done-quote">
+              <div class="done-stars done-stars--no">${stars(state.no.rating)}</div>
+              <p>${esc(state.no.text) || "<em>bez teksta</em>"}</p>
+            </div>
+            <p class="done-meta">Poslano na <b>vlasnik@tvojobrt.hr</b> — na Googleu se ne pojavljuje ništa.</p>
+          </div>
+        </div>
+        <p class="demo-note">Gost se ispuhao kod tebe, a rejting je ostao netaknut. U demou se ništa ne šalje.</p>
+        <span class="demo-outcome demo-outcome--no">Stiže ti na mail · ne pojavljuje se javno</span>
+        <div class="demo-actions">
+          <button class="demo-btn demo-btn--yes" data-go="yes">Probaj granu DA</button>
+          <button class="demo-btn demo-btn--ghost" data-go="start">Ispočetka</button>
         </div>
       </div>`
   };
@@ -440,8 +520,32 @@ function initDemo() {
   }
 
   screen.addEventListener("click", e => {
-    const btn = e.target.closest("[data-go]");
-    if (btn) render(btn.dataset.go);
+    const go = e.target.closest("[data-go]");
+    if (go) { render(go.dataset.go); return; }
+
+    const send = e.target.closest("[data-send]");
+    if (send) { render(send.dataset.send === "yes" ? "yesDone" : "noDone"); return; }
+
+    /* Ocjena se mijenja na mjestu — bez ponovnog crtanja, da tekst
+       u polju i fokus ne odlete. */
+    const star = e.target.closest("[data-rate]");
+    if (star) {
+      const branch = star.dataset.branch;
+      const n = +star.dataset.rate;
+      state[branch].rating = n;
+      star.parentElement.querySelectorAll(".rate-star").forEach((s, i) => {
+        s.classList.toggle("is-on", i < n);
+        if (i + 1 === n) s.setAttribute("aria-current", "true");
+        else s.removeAttribute("aria-current");
+      });
+      const out = screen.querySelector(`[data-out="${branch}"]`);
+      if (out) out.textContent = n + "/5";
+    }
+  });
+
+  screen.addEventListener("input", e => {
+    const f = e.target.closest("[data-field]");
+    if (f) state[f.dataset.branch].text = f.value;
   });
 
   render("start");
