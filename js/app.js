@@ -552,38 +552,6 @@ function initDemo() {
 }
 
 /* =========================================================================
-   7. Brojači
-   Brojevi se broje pri skrolu. Rezervirane vrijednosti (data-placeholder)
-   se preskaču — ne prikazujemo izmišljene brojke kao stvarne.
-   ========================================================================= */
-
-function initCounters() {
-  const nums = document.querySelectorAll(".stat-number");
-  if (!nums.length || typeof gsap === "undefined" || typeof ScrollTrigger === "undefined") return;
-
-  nums.forEach(el => {
-    if (el.dataset.placeholder === "true") return;
-
-    const target = parseFloat(el.dataset.value);
-    if (!Number.isFinite(target)) return;
-    const decimals = parseInt(el.dataset.decimals || "0", 10);
-
-    if (REDUCED_MOTION) { el.textContent = target.toLocaleString("hr-HR"); return; }
-
-    gsap.fromTo(el, { textContent: 0 }, {
-      textContent: target,
-      duration: 2,
-      ease: "power1.out",
-      snap: { textContent: decimals === 0 ? 1 : 0.01 },
-      scrollTrigger: { trigger: el, start: "top 85%", toggleActions: "play none none reverse" },
-      onUpdate: function () {
-        el.textContent = Number(el.textContent).toLocaleString("hr-HR");
-      }
-    });
-  });
-}
-
-/* =========================================================================
    Pokretanje
    ========================================================================= */
 
@@ -597,7 +565,6 @@ function boot() {
   initCardTilt();
   initCalculator();
   initDemo();
-  initCounters();
 
   if (WHATSAPP_NUMBER === "385000000000") {
     console.warn(

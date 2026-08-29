@@ -33,10 +33,14 @@ Bez buildera i bez ovisnosti. GSAP, ScrollTrigger i Lenis učitavaju se s CDN-a.
 1. **WhatsApp broj** — u `js/app.js` stoji placeholder `385000000000`.
    Dok se ne zamijeni, svih devet CTA gumba vodi u prazno. Konzola upozorava.
 
-2. **Sekcija „Brojke koje uvjeravaju"** je namjerno prazna, uokvirena
-   narančastom crtkanom linijom. Brojke i rok isporuke nisu izmišljeni —
-   treba upisati stvarne u `data-value` atribute i ukloniti klasu
-   `needs-data`. Ako stvarnih brojki nema, sekciju maknuti.
+2. **Adresa u demou** — `vlasnik@tvojobrt.hr` u `js/app.js` je ilustrativna
+   i treba je zamijeniti pravom adresom vlasnika.
+
+Sekcija „Brojke koje uvjeravaju" (isporučene kartice, poslovni korisnici,
+rok isporuke) uklonjena je na zahtjev. Stajala je prazna jer stvarnih brojki
+nije bilo, a izmišljene se ne stavljaju. Ako brojke jednom stignu, vraća se
+kao obična sekcija sa `.stats` gridom; kod je u povijesti (commit prije
+uklanjanja) zajedno s `initCounters` koji ih je brojao pri skrolu.
 
 ## Interakcije
 
