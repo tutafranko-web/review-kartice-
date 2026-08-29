@@ -36,6 +36,30 @@ Bez buildera i bez ovisnosti. GSAP, ScrollTrigger i Lenis učitavaju se s CDN-a.
 2. **Adresa u demou** — `vlasnik@tvojobrt.hr` u `js/app.js` je ilustrativna
    i treba je zamijeniti pravom adresom vlasnika.
 
+3. **Ako stranica dobije domenu** (npr. reviewcard.hr), zamijeniti adresu
+   `https://tutafranko-web.github.io/review-kartice-/` na svim mjestima:
+   `canonical`, `og:url`, `og:image`, `twitter:image`, `@id`/`url`/`image`
+   u JSON-LD-u te `<loc>` i `Sitemap:` u `sitemap.xml` i `robots.txt`.
+   Ostavljena kriva adresa u canonicalu znači da Google indeksira staru.
+
+## Indeksiranje
+
+Stranica je indeksabilna: `<meta name="robots" content="index, follow, …">`.
+Prije se ondje nalazio `noindex, nofollow` (namjerno, dok je stranica bila
+nedovršena) — zbog njega je Search Console javljao „URL nije dostupan
+Googleu / Stranica se ne može indeksirati".
+
+- `robots.txt` na github.io adresi **nema učinka** — tražilice ga čitaju samo
+  s korijena domene, koji nije u ovom repozitoriju. Postaje djelatan tek uz
+  vlastitu domenu. Dotad indeksiranje kontrolira meta tag.
+- `preview.html` namjerno zadržava `noindex` — to je alat za pregled, ne
+  sadržaj za tražilice.
+- `sitemap.xml` se u Search Consoleu predaje punom adresom.
+- JSON-LD nosi tri ponude iz sekcije Paketi (20 / 75 / 120 €). **Ako se
+  cjenik promijeni, promijeniti i JSON-LD**, inače Google javlja neslaganje
+  cijene na stranici i u strukturiranim podacima. Namjerno nema
+  `aggregateRating` — nema stvarnih ocjena, a izmišljene su kršenje pravila.
+
 Sekcija „Brojke koje uvjeravaju" (isporučene kartice, poslovni korisnici,
 rok isporuke) uklonjena je na zahtjev. Stajala je prazna jer stvarnih brojki
 nije bilo, a izmišljene se ne stavljaju. Ako brojke jednom stignu, vraća se

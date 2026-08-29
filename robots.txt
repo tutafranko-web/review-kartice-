@@ -1,0 +1,13 @@
+# NAPOMENA: na github.io adresi ova datoteka NEMA učinka. Tražilice čitaju
+# robots.txt samo s korijena domene (tutafranko-web.github.io/robots.txt), a
+# taj korijen nije u ovom repozitoriju. Stoji ovdje da bude ispravna onog
+# trenutka kad stranica dobije vlastitu domenu (npr. reviewcard.hr).
+# Indeksiranje se dotad kontrolira meta robots tagom u index.html.
+
+User-agent: *
+Allow: /
+
+# preview.html je alat za pregled na mobitelu, nije sadržaj za tražilice
+Disallow: /preview.html
+
+Sitemap: https://tutafranko-web.github.io/review-kartice-/sitemap.xml

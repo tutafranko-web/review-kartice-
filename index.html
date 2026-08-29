@@ -3,12 +3,34 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>reviewcard.hr — NFC kartice za Google recenzije</title>
-<meta name="description" content="NFC kartica za Google recenzije. Gost prisloni telefon i u sekundi je na vašem Google profilu. Bez aplikacija, bez QR gužve — samo tap.">
-<!-- ⚠️ PREGLEDNA VERZIJA — ukloniti ovaj redak prije prave objave.
-     Dok stoji, Google i ostali tražilice neće indeksirati stranicu.
-     Stranica je nedovršena: WhatsApp broj je placeholder. -->
-<meta name="robots" content="noindex, nofollow">
+<title>NFC kartice za Google recenzije — reviewcard.hr</title>
+<meta name="description" content="NFC kartica za Google recenzije. Gost prisloni telefon i u sekundi je na tvom Google profilu — bez aplikacije i bez QR koda. Cijena od 12 € po kartici.">
+
+<!-- ⚠️ SVE ADRESE NIŽE POKAZUJU NA GitHub Pages. Ako stranica jednom dobije
+     domenu reviewcard.hr, zamijeniti ih redom: canonical, og:url, og:image,
+     twitter:image, te @id/url/image u JSON-LD-u i adresu u sitemap.xml. -->
+<link rel="canonical" href="https://tutafranko-web.github.io/review-kartice-/">
+<meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1">
+<meta name="theme-color" content="#161826">
+
+<!-- Open Graph — WhatsApp, Facebook, LinkedIn, Viber -->
+<meta property="og:type" content="website">
+<meta property="og:locale" content="hr_HR">
+<meta property="og:site_name" content="reviewcard.hr">
+<meta property="og:url" content="https://tutafranko-web.github.io/review-kartice-/">
+<meta property="og:title" content="NFC kartice za Google recenzije — reviewcard.hr">
+<meta property="og:description" content="Gost prisloni telefon i u sekundi je na tvom Google profilu — bez aplikacije i bez QR koda. Cijena od 12 € po kartici.">
+<meta property="og:image" content="https://tutafranko-web.github.io/review-kartice-/assets/og.png">
+<meta property="og:image:type" content="image/png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="Plava NFC kartica s Google logotipom i natpisom Review Us On Google.">
+
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="NFC kartice za Google recenzije — reviewcard.hr">
+<meta name="twitter:description" content="Gost prisloni telefon i u sekundi je na tvom Google profilu — bez aplikacije i bez QR koda.">
+<meta name="twitter:image" content="https://tutafranko-web.github.io/review-kartice-/assets/og.png">
+
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%23161826'/%3E%3Cpath d='M16 6l3.1 6.3 6.9 1-5 4.9 1.2 6.9-6.2-3.3-6.2 3.3 1.2-6.9-5-4.9 6.9-1z' fill='%239184d9'/%3E%3C/svg%3E">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -16,6 +38,72 @@
 <!-- ?v= se podigne pri svakoj izmjeni; bez toga preglednik do 10 minuta
      (a na mobitelu i dulje) servira staru verziju iz cachea -->
 <link rel="stylesheet" href="css/style.css?v=11">
+
+<!-- Strukturirani podaci. Cijene su one koje stvarno stoje u sekciji Paketi —
+     ako se cjenik promijeni, promijeniti i ovdje, inače Google javlja
+     neslaganje. Namjerno NEMA aggregateRating ni recenzija: nema stvarnih,
+     a izmišljene ocjene su kršenje Googleovih pravila. -->
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "Organization",
+      "@id": "https://tutafranko-web.github.io/review-kartice-/#organizacija",
+      "name": "reviewcard.hr",
+      "url": "https://tutafranko-web.github.io/review-kartice-/",
+      "logo": "https://tutafranko-web.github.io/review-kartice-/assets/og.png",
+      "areaServed": { "@type": "Country", "name": "Hrvatska" }
+    },
+    {
+      "@type": "WebSite",
+      "@id": "https://tutafranko-web.github.io/review-kartice-/#stranica",
+      "url": "https://tutafranko-web.github.io/review-kartice-/",
+      "name": "reviewcard.hr",
+      "inLanguage": "hr-HR",
+      "publisher": { "@id": "https://tutafranko-web.github.io/review-kartice-/#organizacija" }
+    },
+    {
+      "@type": "Product",
+      "@id": "https://tutafranko-web.github.io/review-kartice-/#kartica",
+      "name": "NFC kartica za Google recenzije",
+      "description": "NFC kartica koju gost prisloni telefonom i odmah mu se otvara tvoj Google profil za recenziju. Radi bez aplikacije i bez QR koda, dostupna u crnoj i plavoj boji.",
+      "image": [
+        "https://tutafranko-web.github.io/review-kartice-/assets/card-blue.png",
+        "https://tutafranko-web.github.io/review-kartice-/assets/card-black.png"
+      ],
+      "brand": { "@id": "https://tutafranko-web.github.io/review-kartice-/#organizacija" },
+      "category": "NFC kartice za Google recenzije",
+      "offers": [
+        {
+          "@type": "Offer",
+          "name": "1 kartica",
+          "price": "20",
+          "priceCurrency": "EUR",
+          "availability": "https://schema.org/InStock",
+          "url": "https://tutafranko-web.github.io/review-kartice-/#paketi"
+        },
+        {
+          "@type": "Offer",
+          "name": "5 kartica",
+          "price": "75",
+          "priceCurrency": "EUR",
+          "availability": "https://schema.org/InStock",
+          "url": "https://tutafranko-web.github.io/review-kartice-/#paketi"
+        },
+        {
+          "@type": "Offer",
+          "name": "10 kartica",
+          "price": "120",
+          "priceCurrency": "EUR",
+          "availability": "https://schema.org/InStock",
+          "url": "https://tutafranko-web.github.io/review-kartice-/#paketi"
+        }
+      ]
+    }
+  ]
+}
+</script>
 </head>
 <body>
 
