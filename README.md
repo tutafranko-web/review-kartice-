@@ -38,31 +38,35 @@ Bez buildera i bez ovisnosti. GSAP, ScrollTrigger i Lenis učitavaju se s CDN-a.
    treba upisati stvarne u `data-value` atribute i ukloniti klasu
    `needs-data`. Ako stvarnih brojki nema, sekciju maknuti.
 
-## Uvodna animacija
+## Interakcije
 
-Frameovi su izvučeni iz uspravnog videa (1080×1920, 16,8 s) u punoj
-rezoluciji:
+Video animacija je uklonjena (i frameovi s njom). Stranicu sada nose:
 
-```bash
-ffmpeg -i video.mov -vf "fps=12" -c:v libwebp -quality 82 \
-  "frames/frame_%04d.webp"
-```
+**Sekvenca dodira** (`#kako`) — prikovana sekcija visoka 300vh. Kako skrolaš,
+`data-step` na `#tap` ide 1 → 2 → 3: telefon se spušta prema kartici, NFC
+valovi pulsiraju, pa se na ekranu pojavi recenzija sa zvjezdicama koje se
+pale s odmakom. Scena je crtana CSS-om — nekoliko kB umjesto 19 MB frameova.
+Koraci su prava sekvenca pa brojevi 01/02/03 nose informaciju, nisu ukras.
 
-201 frame, ~19 MB. Vezani su na skrol kroz blok visok 250vh (200vh na
-mobitelu) — visina bloka izravno određuje brzinu animacije. Na mobitelu animacija zauzima cijeli ekran (ispod izbornika) i
-nema nikakvog teksta; na desktopu je video u okviru telefona u sredini.
-Ako se video mijenja, uskladiti `FRAME_COUNT` u `js/app.js`.
+**Traka napretka** — tanka akcentna linija na vrhu; koliko je pročitano.
+
+**Traka djelatnosti** (`.marquee`) — imena branši klize vodoravno na skrol.
+
+**Kalkulator ↔ paketi** — dok vučeš klizač, odgovarajuća kartica paketa
+dobiva klasu `is-match` i osvijetli se, pa je veza između klizača i cjenika
+vidljiva.
+
+**Nagib kartica** — slike proizvoda prate pokazivač (samo uređaji s mišem).
 
 Detalji koje je lako slomiti pri izmjenama:
 
 - `body` **ne smije** imati `overflow-x: hidden` — pretvara body u scroll
-  kontejner i ubija `position: sticky`, čime animacija prestaje držati kadar.
-  Vodoravni višak se rješava preko `overflow-x: clip` na `html`.
-- Svi elementi u `.intro-sticky` moraju biti eksplicitno u `grid-row: 1`.
-  Bez toga grid gura treću poruku u drugi red, gdje je `overflow: hidden`
-  odreže.
-- `FRAME_SPEED = 1.0` jer ScrollTrigger progres 1.0 pada točno u trenutku
-  kad se sticky kadar otpušta.
+  kontejner i ubija `position: sticky`, čime prikovana sekcija prestaje
+  držati kadar. Vodoravni višak se rješava preko `overflow-x: clip` na `html`.
+- `.tap-phone` se pomiče preko `bottom`, ne `transform: translateY`. Tako
+  uvijek ostaje razmak iznad kartice; s translateY telefon prekrije karticu
+  i izgubi se poanta da je *prislanja na* nešto.
+- Visina `.s-kako` (300vh) određuje koliko skrola traje sekvenca.
 
 ## Dizajn
 

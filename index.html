@@ -10,12 +10,16 @@
      Stranica je nedovršena: WhatsApp broj je placeholder, sekcija s
      brojkama je prazna. -->
 <meta name="robots" content="noindex, nofollow">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%23161826'/%3E%3Cpath d='M16 6l3.1 6.3 6.9 1-5 4.9 1.2 6.9-6.2-3.3-6.2 3.3 1.2-6.9-5-4.9 6.9-1z' fill='%239184d9'/%3E%3C/svg%3E">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
+
+<!-- koliko je stranice pročitano — akcent kao linija, u duhu sustava -->
+<div class="progress" id="progress" aria-hidden="true"><span></span></div>
 
 <div class="page">
 
@@ -30,21 +34,6 @@
     </div>
     <a class="btn btn-primary" data-wa="hero" target="_blank" rel="noopener">Naruči</a>
   </nav>
-
-  <!-- ================= 1. UVODNA SCROLL ANIMACIJA =================
-       Samo video, bez ikakvog teksta. Na mobitelu zauzima cijeli ekran
-       (ispod izbornika), na desktopu je telefon u sredini.
-  -->
-  <section class="intro" id="uvod" aria-label="Kako kartica radi">
-    <div class="intro-sticky">
-      <div class="intro-glow" aria-hidden="true"></div>
-      <div class="intro-stage" id="introStage">
-        <img class="intro-poster" id="introPoster" src="frames/frame_0001.webp" alt="Kartica za Google recenzije u upotrebi na brodu">
-        <canvas id="introCanvas"></canvas>
-        <div class="intro-loader" id="introLoader"><span></span></div>
-      </div>
-    </div>
-  </section>
 
   <!-- ================= 2. HERO ================= -->
   <section class="hero">
@@ -75,27 +64,69 @@
 
   <hr class="hr">
 
-  <!-- ================= 3. KAKO RADI ================= -->
+  <!-- ================= 3. KAKO RADI =================
+       Prikovana sekvenca: dok skrolaš, telefon se spušta na karticu i na
+       ekranu se pojavi recenzija. Koraci su prava sekvenca pa brojevi
+       01/02/03 nose informaciju, ne ukras.
+  -->
   <section class="s-kako" id="kako">
-    <div class="section-head" data-reveal>
-      <span class="tag tag-accent">Kako radi</span>
-      <h2>Tri koraka do recenzije</h2>
-    </div>
-    <div class="grid grid-kako" data-reveal>
-      <div class="card">
-        <div class="step-num">01</div>
-        <h3 class="card-title">Postavi karticu</h3>
-        <p class="card-body">Stavi karticu na šank, stol ili recepciju — negdje gdje je gostu na dohvat ruke.</p>
-      </div>
-      <div class="card">
-        <div class="step-num">02</div>
-        <h3 class="card-title">Gost prisloni telefon</h3>
-        <p class="card-body">NFC čip radi bez aplikacije. Telefon odmah prepozna karticu i otvara link.</p>
-      </div>
-      <div class="card">
-        <div class="step-num">03</div>
-        <h3 class="card-title">Otvara se recenzija</h3>
-        <p class="card-body">Tvoj Google profil se otvara u sekundi — gost ostavlja recenziju bez tipkanja adrese.</p>
+    <div class="kako-sticky">
+      <div class="kako-inner">
+
+        <div class="kako-copy">
+          <span class="tag tag-accent">Kako radi</span>
+          <h2>Tri koraka do recenzije</h2>
+
+          <ol class="steps" id="steps">
+            <li class="step" data-step="1">
+              <span class="step-n">01</span>
+              <div>
+                <h3>Postavi karticu</h3>
+                <p>Stavi karticu na šank, stol ili recepciju — negdje gdje je gostu na dohvat ruke.</p>
+              </div>
+            </li>
+            <li class="step" data-step="2">
+              <span class="step-n">02</span>
+              <div>
+                <h3>Gost prisloni telefon</h3>
+                <p>NFC čip radi bez aplikacije. Telefon odmah prepozna karticu i otvara link.</p>
+              </div>
+            </li>
+            <li class="step" data-step="3">
+              <span class="step-n">03</span>
+              <div>
+                <h3>Otvara se recenzija</h3>
+                <p>Tvoj Google profil se otvara u sekundi — gost ostavlja recenziju bez tipkanja adrese.</p>
+              </div>
+            </li>
+          </ol>
+        </div>
+
+        <!-- scena: kartica + telefon, sve crtano CSS-om -->
+        <div class="tap" id="tap" data-step="1" aria-hidden="true">
+          <div class="tap-waves"><i></i><i></i><i></i></div>
+
+          <div class="tap-card">
+            <span class="tap-card-top">Review Us On</span>
+            <span class="tap-card-g">G</span>
+            <span class="tap-card-stars">★★★★★</span>
+          </div>
+
+          <div class="tap-phone">
+            <div class="tap-screen">
+              <div class="tap-idle"></div>
+              <div class="tap-review">
+                <span class="tap-bar tap-bar-url"></span>
+                <span class="tap-biz"></span>
+                <div class="tap-stars"><i></i><i></i><i></i><i></i><i></i></div>
+                <span class="tap-bar tap-bar-1"></span>
+                <span class="tap-bar tap-bar-2"></span>
+                <span class="tap-send">Objavi</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
       </div>
     </div>
   </section>
@@ -151,6 +182,14 @@
       <h2>Primjeri primjene</h2>
       <p>Recenzije su ključne za rejting i vidljivost na Googleu — u svakoj branši gdje ljudi biraju očima.</p>
     </div>
+
+    <!-- traka djelatnosti: kreće se na skrol, pokazuje širinu primjene -->
+    <div class="marquee" aria-hidden="true">
+      <div class="marquee-row" data-speed="-16">
+        <span>Restorani</span><i>·</i><span>Kafići</span><i>·</i><span>Hoteli</span><i>·</i><span>Apartmani</span><i>·</i><span>Frizeri</span><i>·</i><span>Saloni</span><i>·</i><span>Spa</span><i>·</i><span>Izleti</span><i>·</i><span>Charter</span><i>·</i><span>Restorani</span><i>·</i><span>Kafići</span><i>·</i><span>Hoteli</span><i>·</i><span>Apartmani</span><i>·</i><span>Frizeri</span><i>·</i><span>Saloni</span><i>·</i><span>Spa</span><i>·</i><span>Izleti</span><i>·</i><span>Charter</span><i>·</i>
+      </div>
+    </div>
+
     <div class="grid grid-primjena" data-reveal>
       <div class="card">
         <h3 class="card-title">Turizam i izleti</h3>
@@ -180,21 +219,21 @@
     </div>
 
     <div class="grid grid-paketi" data-reveal>
-      <div class="card pkg-card">
+      <div class="card pkg-card" data-tier="1">
         <span class="card-kicker">1 kartica</span>
         <div class="pkg-figure">20&nbsp;€</div>
         <p class="card-body" style="color:color-mix(in srgb, var(--color-text) 60%, transparent);">20 € po kartici</p>
         <a class="btn btn-secondary btn-block" data-wa="pkg1" target="_blank" rel="noopener">Naruči</a>
       </div>
 
-      <div class="card pkg-card">
+      <div class="card pkg-card" data-tier="5">
         <span class="card-kicker">5 kartica</span>
         <div class="pkg-figure">75&nbsp;€</div>
         <p class="card-body save">15 € po kartici · ušteda 25 €</p>
         <a class="btn btn-secondary btn-block" data-wa="pkg5" target="_blank" rel="noopener">Naruči</a>
       </div>
 
-      <div class="card pkg-card pkg-card--featured">
+      <div class="card pkg-card pkg-card--featured" data-tier="10">
         <span class="tag tag-accent pkg-badge">Najpopularnije</span>
         <span class="card-kicker">10 kartica</span>
         <div class="pkg-figure">120&nbsp;€</div>
@@ -202,7 +241,7 @@
         <a class="btn btn-primary btn-block" data-wa="pkg10" target="_blank" rel="noopener">Naruči</a>
       </div>
 
-      <div class="card pkg-card">
+      <div class="card pkg-card" data-tier="11">
         <span class="card-kicker">10+ kartica</span>
         <div class="pkg-figure is-small">Popust po<br>dogovoru</div>
         <p class="card-body save">Što veća količina, to veći popust po kartici.</p>

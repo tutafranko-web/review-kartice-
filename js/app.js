@@ -121,128 +121,110 @@ function initLenis() {
 }
 
 /* =========================================================================
-   4. Uvodna scroll animacija
-   201 framea u punoj rezoluciji videa (1080x1920), vezanih na skrol.
-   Bez teksta — samo video.
+   4a. Traka napretka čitanja
    ========================================================================= */
 
-const FRAME_COUNT = 201;
+function initProgress() {
+  const bar = document.querySelector("#progress span");
+  if (!bar) return;
 
-/* ScrollTrigger je postavljen "top top" -> "bottom bottom", a sticky kadar
-   je visok točno (100vh - nav). Zbog toga progres 1.0 pada u isti trenutak
-   u kojem se kadar otpušta i kreće predaja heroju. Video zato smije trajati
-   punom duljinom progresa — bez ubrzavanja. */
-const FRAME_SPEED = 1.0;
-const FRAME_PATH  = i => `frames/frame_${String(i + 1).padStart(4, "0")}.webp`;
-
-function initIntro() {
-  const stage  = document.getElementById("introStage");
-  const canvas = document.getElementById("introCanvas");
-  const loader = document.getElementById("introLoader");
-  if (!stage || !canvas) return;
-
-  const ctx = canvas.getContext("2d", { alpha: false });
-
-  /* mobitel učitava svaki drugi frame — isti set datoteka, upola manje prometa */
-  const isSmall = window.matchMedia("(max-width: 900px)").matches;
-  const step = isSmall ? 2 : 1;
-  const indices = [];
-  for (let i = 0; i < FRAME_COUNT; i += step) indices.push(i);
-
-  const frames = new Map();
-  let currentKey = -1;
-  let loadedCount = 0;
-
-  /* --- veličina canvasa uz devicePixelRatio --- */
-  function sizeCanvas() {
-    const dpr = Math.min(window.devicePixelRatio || 1, 2);
-    /* offsetWidth/Height ignoriraju transform (scale) na stageu,
-       pa mjerilo skrola ne kvari razlučivost canvasa */
-    canvas.width  = Math.round(stage.offsetWidth  * dpr);
-    canvas.height = Math.round(stage.offsetHeight * dpr);
-    if (currentKey >= 0) draw(currentKey);
+  function update() {
+    const max = document.documentElement.scrollHeight - window.innerHeight;
+    const p = max > 0 ? Math.min(window.scrollY / max, 1) : 0;
+    bar.style.width = (p * 100).toFixed(2) + "%";
   }
 
-  /* --- crtanje: cover — na mobitelu stage nije istog omjera kao video,
-     pa se video simetrično obreže da ispuni cijeli ekran --- */
-  function draw(key) {
-    const img = frames.get(key);
-    if (!img) return;
-    const cw = canvas.width, ch = canvas.height;
-    const scale = Math.max(cw / img.naturalWidth, ch / img.naturalHeight);
-    const dw = img.naturalWidth * scale, dh = img.naturalHeight * scale;
-    ctx.drawImage(img, (cw - dw) / 2, (ch - dh) / 2, dw, dh);
+  window.addEventListener("scroll", update, { passive: true });
+  window.addEventListener("resize", update);
+  update();
+}
+
+/* =========================================================================
+   4b. Sekvenca dodira — prikovana sekcija "Kako radi"
+   Skrol vodi kroz tri koraka: kartica na stolu → telefon prislonjen →
+   recenzija na ekranu. Koraci se izmjenjuju, aktivni se ističe.
+   ========================================================================= */
+
+function initTapSequence() {
+  const section = document.querySelector(".s-kako");
+  const tap     = document.getElementById("tap");
+  const steps   = [...document.querySelectorAll(".step")];
+  if (!section || !tap || !steps.length) return;
+
+  function setStep(n) {
+    if (tap.dataset.step === String(n)) return;
+    tap.dataset.step = n;
+    steps.forEach(s => s.classList.toggle("is-on", s.dataset.step === String(n)));
   }
 
-  function loadFrame(key) {
-    return new Promise(resolve => {
-      const img = new Image();
-      img.decoding = "async";
-      img.onload = () => { frames.set(key, img); resolve(img); };
-      img.onerror = () => resolve(null);
-      img.src = FRAME_PATH(key);
-    });
+  /* bez skrol-animacije svi koraci stoje otvoreni, scena na zadnjem stanju */
+  if (REDUCED_MOTION || typeof ScrollTrigger === "undefined") {
+    steps.forEach(s => s.classList.add("is-on"));
+    tap.dataset.step = "3";
+    return;
   }
 
-  function markProgress() {
-    loadedCount++;
-    const pct = Math.round((loadedCount / indices.length) * 100);
-    const bar = loader && loader.firstElementChild;
-    if (bar) bar.style.width = pct + "%";
-  }
-
-  /* --- dvofazno učitavanje: prvih 10 odmah, ostatak u pozadini --- */
-  async function preload() {
-    const head = indices.slice(0, 10);
-    const tail = indices.slice(10);
-
-    await Promise.all(head.map(k => loadFrame(k).then(r => { markProgress(); return r; })));
-    sizeCanvas();
-    draw(indices[0]);
-    currentKey = indices[0];
-
-    /* učitavanje u serijama da preglednik ne otvori 200 zahtjeva odjednom */
-    const BATCH = 12;
-    for (let i = 0; i < tail.length; i += BATCH) {
-      await Promise.all(
-        tail.slice(i, i + BATCH).map(k => loadFrame(k).then(r => { markProgress(); return r; }))
-      );
-    }
-    stage.classList.add("is-ready");
-  }
-
-  /* --- najbliži učitani frame, da se nikad ne crta prazno --- */
-  function nearestKey(target) {
-    if (frames.has(target)) return target;
-    let best = -1, bestDist = Infinity;
-    for (const k of frames.keys()) {
-      const d = Math.abs(k - target);
-      if (d < bestDist) { bestDist = d; best = k; }
-    }
-    return best;
-  }
-
-  function renderAt(progress) {
-    const accelerated = Math.min(progress * FRAME_SPEED, 1);
-    const raw = Math.min(Math.floor(accelerated * FRAME_COUNT), FRAME_COUNT - 1);
-    const key = nearestKey(Math.round(raw / step) * step);
-    if (key >= 0 && key !== currentKey) {
-      currentKey = key;
-      requestAnimationFrame(() => draw(key));
-    }
-  }
-
-  window.addEventListener("resize", sizeCanvas);
-  preload();
-
-  if (REDUCED_MOTION || typeof ScrollTrigger === "undefined") return;
+  setStep(1);
+  steps[0].classList.add("is-on");
 
   ScrollTrigger.create({
-    trigger: document.querySelector(".intro"),
+    trigger: section,
     start: "top top",
     end: "bottom bottom",
     scrub: true,
-    onUpdate: self => renderAt(self.progress)
+    onUpdate: self => {
+      const p = self.progress;
+      setStep(p < 0.34 ? 1 : p < 0.67 ? 2 : 3);
+    }
+  });
+}
+
+/* =========================================================================
+   4c. Traka djelatnosti — klizi vodoravno dok skrolaš
+   ========================================================================= */
+
+function initMarquee() {
+  if (REDUCED_MOTION || typeof ScrollTrigger === "undefined") return;
+
+  document.querySelectorAll(".marquee").forEach(wrap => {
+    const row = wrap.querySelector(".marquee-row");
+    if (!row) return;
+    const speed = parseFloat(row.dataset.speed) || -16;
+
+    gsap.fromTo(row,
+      { xPercent: 0 },
+      {
+        xPercent: speed,
+        ease: "none",
+        scrollTrigger: { trigger: wrap, start: "top bottom", end: "bottom top", scrub: true }
+      });
+  });
+}
+
+/* =========================================================================
+   4d. Nagib kartica proizvoda — kartica je fizički predmet
+   ========================================================================= */
+
+function initCardTilt() {
+  if (REDUCED_MOTION) return;
+  if (!window.matchMedia("(hover: hover) and (pointer: fine)").matches) return;
+
+  document.querySelectorAll(".product-card").forEach(card => {
+    const img = card.querySelector(".product-well img");
+    if (!img) return;
+
+    card.addEventListener("pointermove", e => {
+      const r = card.getBoundingClientRect();
+      const x = (e.clientX - r.left) / r.width - 0.5;
+      const y = (e.clientY - r.top) / r.height - 0.5;
+      img.style.setProperty("--tilt-y", (x * 16).toFixed(2) + "deg");
+      img.style.setProperty("--tilt-x", (-y * 12).toFixed(2) + "deg");
+    });
+
+    card.addEventListener("pointerleave", () => {
+      img.style.setProperty("--tilt-y", "0deg");
+      img.style.setProperty("--tilt-x", "0deg");
+    });
   });
 }
 
@@ -286,12 +268,22 @@ function initCalculator() {
 
   const eur = n => `${n.toLocaleString("hr-HR")} €`;
 
+  const pkgCards = [...document.querySelectorAll(".pkg-card[data-tier]")];
+
+  /* koji paket odgovara trenutnoj količini — odgovarajuća kartica se
+     osvijetli da veza između klizača i cjenika bude vidljiva */
+  function markTier(qty) {
+    const tier = qty > 10 ? 11 : qty >= 10 ? 10 : qty >= 5 ? 5 : 1;
+    pkgCards.forEach(c => c.classList.toggle("is-match", Number(c.dataset.tier) === tier));
+  }
+
   function update() {
     const qty   = parseInt(range.value, 10);
     const unit  = unitPriceFor(qty);
     const total = qty * unit;
     const save  = qty * BASE_PRICE - total;
 
+    markTier(qty);
     elQty.textContent   = qty;
     elTotal.textContent = eur(total);
     elUnit.textContent  = eur(unit);
@@ -432,7 +424,10 @@ function boot() {
   initWhatsApp();
   initReveal();
   initLenis();
-  initIntro();
+  initProgress();
+  initTapSequence();
+  initMarquee();
+  initCardTilt();
   initCalculator();
   initDemo();
   initCounters();

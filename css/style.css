@@ -276,82 +276,24 @@ section[id] { scroll-margin-top: 84px; }
 .nav-links a:hover { color: var(--color-text); }
 
 /* =========================================================================
-   1. Uvodna scroll animacija
+   Traka napretka čitanja — akcent kao tanka linija, u duhu sustava
    ========================================================================= */
 
-.intro {
-  position: relative;
-  /* visina = trajanje skrola; manja visina = brža animacija */
-  height: 250vh;
-}
-
-/* Lijepi se ISPOD izbornika (top: --nav-h) i visinu si uzima kao ostatak
-   ekrana. Time video nikad ne ulazi pod izbornik, a blok ne prelije dno
-   ekrana ni prije nego se zalijepi. Bez teksta — samo video u sredini. */
-.intro-sticky {
-  position: sticky;
-  top: var(--nav-h);
-  height: calc(100vh - var(--nav-h));
-  padding-bottom: 18px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  overflow: hidden;
-}
-
-/* sjaj iza telefona — nastavlja rc-pulse jezik iz heroja */
-.intro-glow {
-  position: absolute;
-  top: 50%; left: 50%;
-  width: 620px; height: 620px;
-  transform: translate(-50%, -50%);
-  background: radial-gradient(circle, var(--color-accent-800), transparent 68%);
-  opacity: .5;
+.progress {
+  position: fixed;
+  top: 0; left: 0; right: 0;
+  height: 2px;
+  z-index: 40;
   pointer-events: none;
-  animation: rc-pulse 5s ease-in-out infinite;
+  background: transparent;
 }
-
-.intro-stage {
-  position: relative;
-  /* ograničen VISINOM da uvijek cijeli stane ispod izbornika,
-     širina se izvodi iz omjera videa */
-  height: min(74vh, calc(100vh - var(--nav-h) - 40px), 680px);
-  width: auto;
-  aspect-ratio: 9 / 16;
-  border-radius: 28px;
-  overflow: hidden;
-  background: #0e1020;
-  box-shadow: var(--shadow-lg), 0 0 0 1px color-mix(in srgb, var(--color-accent) 30%, transparent);
-}
-
-.intro-stage canvas,
-.intro-poster {
-  position: absolute;
-  inset: 0;
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  display: block;
-}
-
-.intro-poster { transition: opacity .4s ease; }
-.intro-stage.is-ready .intro-poster { opacity: 0; }
-
-/* traka napretka učitavanja */
-.intro-loader {
-  position: absolute;
-  left: 0; right: 0; bottom: 0;
-  height: 3px;
-  background: color-mix(in srgb, #fff 12%, transparent);
-}
-.intro-loader span {
+.progress span {
   display: block;
   height: 100%;
   width: 0;
   background: var(--color-accent);
-  transition: width .2s ease;
+  box-shadow: 0 0 12px color-mix(in srgb, var(--color-accent) 60%, transparent);
 }
-.intro-stage.is-ready .intro-loader { opacity: 0; }
 
 /* =========================================================================
    2. Hero
@@ -436,31 +378,292 @@ section[id] { scroll-margin-top: 84px; }
 }
 
 /* =========================================================================
+   3. Kako radi — prikovana sekvenca dodira
+   Telefon se spušta na karticu, NFC valovi pulsiraju, na ekranu se pojavi
+   recenzija. Sve crtano CSS-om: nekoliko kB umjesto videa.
+   ========================================================================= */
+
+.s-kako { position: relative; height: 300vh; }
+
+.kako-sticky {
+  position: sticky;
+  top: var(--nav-h);
+  height: calc(100vh - var(--nav-h));
+  display: flex;
+  align-items: center;
+  overflow: hidden;
+}
+
+.kako-inner {
+  width: 100%;
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: clamp(28px, 5vw, 72px);
+  align-items: center;
+}
+
+.kako-copy h2 {
+  font-size: clamp(28px, 3.4vw, 42px);
+  letter-spacing: -0.015em;
+  margin: 16px 0 0;
+}
+
+/* --- lista koraka --- */
+
+.steps {
+  list-style: none;
+  margin: clamp(22px, 3vw, 34px) 0 0;
+  padding: 0;
+  display: grid;
+  gap: 4px;
+}
+
+.step {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 16px;
+  padding: 15px 18px 15px 14px;
+  border-radius: var(--radius-md);
+  border-left: 1px solid transparent;
+  opacity: .32;
+  transition: opacity .45s ease, background-color .45s ease, border-color .45s ease;
+}
+.step.is-on {
+  opacity: 1;
+  border-left-color: var(--color-accent);
+  background: color-mix(in srgb, var(--color-accent) 7%, transparent);
+}
+
+.step-n {
+  font-family: var(--font-heading);
+  font-size: 13px;
+  line-height: 1.7;
+  color: color-mix(in srgb, var(--color-text) 45%, transparent);
+  transition: color .45s ease;
+}
+.step.is-on .step-n { color: var(--color-accent); }
+
+.step h3 { font-size: 18px; margin: 0; }
+.step p {
+  font-size: 14px;
+  line-height: 1.55;
+  margin: 6px 0 0;
+  color: color-mix(in srgb, var(--color-text) 72%, transparent);
+}
+
+/* --- scena --- */
+
+.tap {
+  position: relative;
+  width: clamp(230px, 26vw, 310px);
+  height: min(64vh, 490px);
+}
+
+/* NFC valovi — vidljivi samo u koraku 2, između telefona i kartice */
+.tap-waves {
+  position: absolute;
+  left: 50%; bottom: 78px;
+  width: 0; height: 0;
+  opacity: 0;
+  transition: opacity .4s ease;
+}
+.tap[data-step="2"] .tap-waves { opacity: 1; }
+.tap-waves i {
+  position: absolute;
+  left: 50%; top: 50%;
+  width: 66px; height: 66px;
+  margin: -33px 0 0 -33px;
+  border-radius: 50%;
+  border: 1px solid var(--color-accent);
+  opacity: 0;
+}
+.tap[data-step="2"] .tap-waves i { animation: tap-wave 1.9s ease-out infinite; }
+.tap[data-step="2"] .tap-waves i:nth-child(2) { animation-delay: .63s; }
+.tap[data-step="2"] .tap-waves i:nth-child(3) { animation-delay: 1.26s; }
+
+@keyframes tap-wave {
+  0%   { transform: scale(.5); opacity: .85; }
+  100% { transform: scale(2.9); opacity: 0; }
+}
+
+/* kartica na stolu — leži ravno, telefon joj prilazi odozgo */
+.tap-card {
+  position: absolute;
+  left: 50%; bottom: 20px;
+  width: 132px; height: 84px;
+  margin-left: -66px;
+  border-radius: 9px;
+  background: linear-gradient(150deg, #23262f, #101218);
+  box-shadow: var(--shadow-lg);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 2px;
+  transform: perspective(600px) rotateX(52deg);
+  transition: box-shadow .45s ease;
+}
+.tap[data-step="2"] .tap-card {
+  box-shadow: var(--shadow-lg), 0 0 0 1px color-mix(in srgb, var(--color-accent) 55%, transparent);
+}
+.tap-card-top {
+  font-size: 7px;
+  letter-spacing: .04em;
+  color: color-mix(in srgb, #fff 55%, transparent);
+}
+.tap-card-g {
+  font-family: var(--font-heading);
+  font-size: 21px;
+  line-height: 1;
+  font-weight: 500;
+  color: #fff;
+}
+.tap-card-stars { font-size: 8px; letter-spacing: 1px; color: #fbbf24; }
+
+/* telefon — spušta se prema kartici i vraća se gore s recenzijom.
+   Pomiče se preko `bottom` da uvijek ostane razmak iznad kartice
+   (kartica vizualno seže do ~72px zbog nagiba). */
+.tap-phone {
+  position: absolute;
+  left: 50%;
+  bottom: 178px;
+  z-index: 2;
+  width: 148px;
+  height: 282px;
+  margin-left: -74px;
+  border-radius: 22px;
+  padding: 6px;
+  background: linear-gradient(160deg, #3a3d52, #16182a 45%, #2c2f42);
+  box-shadow: var(--shadow-lg);
+  transition: bottom .8s cubic-bezier(.22,.9,.3,1);
+}
+.tap[data-step="2"] .tap-phone { bottom: 90px; }
+.tap[data-step="3"] .tap-phone { bottom: 148px; }
+
+.tap-screen {
+  position: relative;
+  width: 100%; height: 100%;
+  border-radius: 17px;
+  overflow: hidden;
+  background: #0d0f18;
+}
+
+/* prazan ekran u koraku 1 i 2 */
+.tap-idle {
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(90px 60px at 50% 32%, color-mix(in srgb, var(--color-accent) 22%, transparent), transparent 70%),
+    #0d0f18;
+  transition: opacity .4s ease;
+}
+.tap[data-step="3"] .tap-idle { opacity: 0; }
+
+/* ekran recenzije u koraku 3 */
+.tap-review {
+  position: absolute;
+  inset: 0;
+  padding: 14px 12px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 9px;
+  background: #17181d;
+  opacity: 0;
+  transform: translateY(10px);
+  transition: opacity .45s ease .1s, transform .45s ease .1s;
+}
+.tap[data-step="3"] .tap-review { opacity: 1; transform: none; }
+
+.tap-bar {
+  display: block;
+  height: 6px;
+  border-radius: 3px;
+  background: color-mix(in srgb, #fff 13%, transparent);
+}
+.tap-bar-url { width: 78%; height: 12px; border-radius: 6px; margin-bottom: 4px; }
+.tap-biz {
+  width: 46px; height: 46px;
+  border-radius: 50%;
+  background: conic-gradient(#ea4335 0 25%, #fbbc05 0 50%, #34a853 0 75%, #4285f4 0);
+  opacity: .9;
+}
+.tap-bar-1 { width: 82%; }
+.tap-bar-2 { width: 60%; }
+
+.tap-stars { display: flex; gap: 4px; }
+.tap-stars i {
+  width: 15px; height: 15px;
+  background: color-mix(in srgb, #fff 16%, transparent);
+  clip-path: polygon(50% 0%,61% 35%,98% 35%,68% 57%,79% 91%,50% 70%,21% 91%,32% 57%,2% 35%,39% 35%);
+  transition: background-color .3s ease, transform .3s ease;
+}
+.tap[data-step="3"] .tap-stars i { background: #fbbf24; transform: scale(1.12); }
+.tap[data-step="3"] .tap-stars i:nth-child(1) { transition-delay: .35s; }
+.tap[data-step="3"] .tap-stars i:nth-child(2) { transition-delay: .47s; }
+.tap[data-step="3"] .tap-stars i:nth-child(3) { transition-delay: .59s; }
+.tap[data-step="3"] .tap-stars i:nth-child(4) { transition-delay: .71s; }
+.tap[data-step="3"] .tap-stars i:nth-child(5) { transition-delay: .83s; }
+
+.tap-send {
+  margin-top: auto;
+  width: 100%;
+  padding: 8px 0;
+  text-align: center;
+  font-size: 11px;
+  border-radius: 6px;
+  background: color-mix(in srgb, var(--color-accent) 82%, #fff);
+  color: #14121f;
+}
+
+/* =========================================================================
+   Traka djelatnosti — kreće se na skrol
+   ========================================================================= */
+
+.marquee {
+  margin: clamp(30px, 5vw, 48px) calc(-1 * var(--page-gutter)) 0;
+  overflow: hidden;
+  padding: 14px 0;
+  border-top: 1px solid var(--color-divider);
+  border-bottom: 1px solid var(--color-divider);
+  -webkit-mask-image: linear-gradient(90deg, transparent, #000 12%, #000 88%, transparent);
+          mask-image: linear-gradient(90deg, transparent, #000 12%, #000 88%, transparent);
+}
+.marquee-row {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  white-space: nowrap;
+  will-change: transform;
+}
+.marquee-row span {
+  font-family: var(--font-heading);
+  font-size: clamp(20px, 3.4vw, 38px);
+  font-weight: 500;
+  letter-spacing: -0.01em;
+  color: color-mix(in srgb, var(--color-text) 26%, transparent);
+}
+.marquee-row i {
+  font-style: normal;
+  font-size: clamp(14px, 2vw, 22px);
+  color: var(--color-accent);
+  opacity: .55;
+}
+
+/* =========================================================================
    Sekcije sa mrežama
    ========================================================================= */
 
-.s-kako     { padding: clamp(48px, 7vw, 88px) 0; }
 .s-proizvodi{ padding: clamp(48px, 7vw, 88px) 0 clamp(24px, 4vw, 40px); }
 .s-primjena { padding: clamp(32px, 5vw, 56px) 0 clamp(48px, 7vw, 88px); }
 .s-paketi   { padding: clamp(48px, 7vw, 88px) 0; }
 
 .grid { display: grid; margin-top: 36px; }
-.grid-kako     { grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 20px; }
 .grid-proizvodi{ grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 20px; }
 .grid-primjena { grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 16px; margin-top: 32px; }
 .grid-paketi   { grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 16px; }
 
-.step-num {
-  font-family: var(--font-heading);
-  font-size: 15px;
-  color: var(--color-accent);
-  margin-bottom: 10px;
-}
-
-.grid-kako .card-body,
-.grid-primjena .card-body { opacity: 1; }
-.grid-kako .card-body     { color: color-mix(in srgb, var(--color-text) 75%, transparent); }
-.grid-primjena .card-body { color: color-mix(in srgb, var(--color-text) 72%, transparent); }
+.grid-primjena .card-body { opacity: 1; color: color-mix(in srgb, var(--color-text) 72%, transparent); }
 
 /* --- kartice proizvoda --- */
 
@@ -471,12 +674,18 @@ section[id] { scroll-margin-top: 84px; }
   padding: 28px 24px;
   display: flex;
   justify-content: center;
+  perspective: 700px;
 }
+/* kartica je fizički predmet — prati pokazivač kao da je držiš u ruci */
 .product-well img {
   width: 62%;
   height: auto;
   filter: drop-shadow(0 16px 24px rgba(0, 0, 0, .4));
+  transform: rotateX(var(--tilt-x, 0deg)) rotateY(var(--tilt-y, 0deg));
+  transition: transform .35s ease;
+  will-change: transform;
 }
+.product-card:hover .product-well img { transition: transform .08s linear; }
 
 .product-body { padding: 20px 22px 24px; }
 
@@ -529,6 +738,18 @@ section[id] { scroll-margin-top: 84px; }
 .pkg-card .btn { margin-top: auto; }
 
 .pkg-card--featured { box-shadow: 0 0 0 1px var(--color-accent), var(--shadow-md); }
+
+/* paket koji odgovara položaju klizača u kalkulatoru */
+.pkg-card {
+  transition: box-shadow .3s ease, transform .3s ease, border-color .3s ease;
+}
+.pkg-card.is-match {
+  border-color: var(--color-accent);
+  box-shadow: 0 0 0 1px var(--color-accent),
+              0 0 26px color-mix(in srgb, var(--color-accent) 26%, transparent),
+              var(--shadow-md);
+  transform: translateY(-3px);
+}
 .pkg-card--featured .pkg-badge {
   position: absolute;
   top: 14px; right: 14px;
@@ -945,41 +1166,49 @@ section[id] { scroll-margin-top: 84px; }
   .card-tile--black { margin-bottom: 36px; }
   .card-tile--blue  { margin-top: 36px; }
 
-  /* uvodna animacija: video preko CIJELOG ekrana (ispod izbornika),
-     od ruba do ruba — bez okvira telefona, bez sjaja, bez teksta */
-  .intro {
-    height: 200vh;
-    /* probij page gutter da video ide od ruba do ruba */
-    margin-left: calc(-1 * var(--page-gutter));
-    margin-right: calc(-1 * var(--page-gutter));
+  /* sekvenca dodira: scena gore, koraci ispod */
+  .s-kako { height: 320vh; }
+  .kako-inner {
+    grid-template-columns: 1fr;
+    gap: 20px;
+    justify-items: center;
   }
-  .intro-sticky { padding: 0; }
-  .intro-stage {
-    width: 100%;
-    height: 100%;
-    aspect-ratio: auto;
-    border-radius: 0;
-    box-shadow: none;
+  .kako-copy { order: 2; width: 100%; }
+  .tap { order: 1; width: 210px; height: min(42vh, 340px); }
+  .tap-phone {
+    width: 112px; height: 208px; margin-left: -56px;
+    border-radius: 18px; bottom: 124px;
   }
-  .intro-glow { display: none; }
+  .tap[data-step="2"] .tap-phone { bottom: 70px; }
+  .tap[data-step="3"] .tap-phone { bottom: 104px; }
+  .tap-screen { border-radius: 14px; }
+  .tap-card { width: 104px; height: 66px; margin-left: -52px; bottom: 14px; }
+  .tap-waves { bottom: 60px; }
+  .kako-copy h2 { font-size: clamp(24px, 6vw, 32px); }
+  .steps { margin-top: 16px; gap: 2px; }
+  .step { padding: 11px 14px 11px 12px; gap: 12px; }
+  .step h3 { font-size: 16px; }
+  .step p { font-size: 13px; }
 }
 
-/* Mobitel u landscapeu: video isto preko cijelog ekrana */
+/* Mobitel u landscapeu: ekran je nizak — vrati bočni raspored i smanji scenu */
 @media (max-height: 560px) and (orientation: landscape) {
-  .intro {
-    height: 220vh;
-    margin-left: calc(-1 * var(--page-gutter));
-    margin-right: calc(-1 * var(--page-gutter));
+  .s-kako { height: 300vh; }
+  .kako-inner { grid-template-columns: 1fr auto; gap: 24px; }
+  .kako-copy { order: 1; }
+  .tap { order: 2; width: 175px; height: min(84vh, 285px); }
+  .tap-phone {
+    width: 96px; height: 176px; margin-left: -48px;
+    border-radius: 16px; bottom: 100px;
   }
-  .intro-sticky { padding: 0; }
-  .intro-stage {
-    width: 100%;
-    height: 100%;
-    aspect-ratio: auto;
-    border-radius: 0;
-    box-shadow: none;
-  }
-  .intro-glow { display: none; }
+  .tap[data-step="2"] .tap-phone { bottom: 58px; }
+  .tap[data-step="3"] .tap-phone { bottom: 86px; }
+  .tap-screen { border-radius: 12px; }
+  .tap-card { width: 88px; height: 56px; margin-left: -44px; bottom: 12px; }
+  .tap-waves { bottom: 50px; }
+  .steps { margin-top: 12px; }
+  .step { padding: 8px 12px; }
+  .step p { display: none; }
 }
 
 @media (max-width: 760px) {
@@ -1009,20 +1238,15 @@ section[id] { scroll-margin-top: 84px; }
 
   .card-tile--black,
   .card-tile--blue,
-  .hero-art-glow,
-  .intro-glow { animation: none; }
+  .hero-art-glow { animation: none; }
 
-  /* animacija se svede na jedan ekran sa statičnim kadrom */
-  .intro { height: auto; margin-left: 0; margin-right: 0; }
-  .intro-sticky {
-    position: static;
-    height: auto;
-    padding: 48px 0;
-  }
-  .intro-stage {
-    width: min(70vw, 300px);
-    height: auto;
-    aspect-ratio: 9 / 16;
-    border-radius: 28px;
-  }
+  /* sekvenca se svede na jedan ekran: svi koraci vidljivi, scena mirna */
+  .s-kako { height: auto; }
+  .kako-sticky { position: static; height: auto; padding: 48px 0; }
+  .kako-inner { grid-template-columns: 1fr; gap: 28px; justify-items: center; }
+  .kako-copy { order: 2; }
+  .tap { order: 1; }
+  .step { opacity: 1; }
+  .tap-waves { display: none; }
+  .marquee-row { transform: none !important; }
 }
