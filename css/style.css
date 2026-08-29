@@ -1042,7 +1042,7 @@ section[id] { scroll-margin-top: 84px; }
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 26px 20px;
+  padding: 22px 18px;
   border-radius: var(--radius-md);
   background: color-mix(in srgb, #000 30%, transparent);
   text-align: center;
@@ -1086,6 +1086,162 @@ section[id] { scroll-margin-top: 84px; }
 .demo-btn--ghost:hover { background: color-mix(in srgb, #fff 12%, transparent); }
 
 .demo-stars { font-size: 30px; letter-spacing: 4px; color: #fbbf24; margin-bottom: 12px; }
+
+/* =========================================================================
+   Makete ekrana u demou
+   Statične — ništa se ne upisuje ni ne šalje. Google grana i privatna
+   grana moraju se razlikovati na prvi pogled.
+   ========================================================================= */
+
+.demo-step--wide { max-width: 400px; width: 100%; }
+
+.mock {
+  text-align: left;
+  border-radius: 10px;
+  overflow: hidden;
+  box-shadow: 0 14px 34px rgba(0, 0, 0, .45);
+  margin-bottom: 18px;
+}
+
+/* traka na vrhu — nosi glavnu razliku između grana */
+.mock-bar {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 9px 12px;
+  font-size: 11px;
+}
+.mock-url {
+  flex: 1;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.mock-tag {
+  padding: 3px 9px;
+  border-radius: 999px;
+  font-size: 10px;
+  text-transform: uppercase;
+  letter-spacing: .06em;
+  white-space: nowrap;
+}
+.mock-body { padding: 16px 14px 14px; }
+
+/* --- grana DA: javna Google recenzija --- */
+
+.mock--google { background: #ffffff; }
+.mock--google .mock-bar {
+  background: #f1f3f4;
+  color: #5f6368;
+  border-bottom: 1px solid #dadce0;
+}
+.mock-dot {
+  width: 9px; height: 9px;
+  border-radius: 50%;
+  background: conic-gradient(#ea4335 0 25%, #fbbc05 0 50%, #34a853 0 75%, #4285f4 0);
+  flex: none;
+}
+.mock-tag--public { background: #e6f4ea; color: #137333; }
+
+.mock-head { display: flex; align-items: center; gap: 9px; margin-bottom: 10px; }
+.mock-logo {
+  width: 28px; height: 28px;
+  display: grid;
+  place-items: center;
+  border-radius: 50%;
+  background: #fff;
+  border: 1px solid #dadce0;
+  font-family: var(--font-heading);
+  font-size: 15px;
+  color: #4285f4;
+}
+.mock-title { font-size: 14px; font-weight: 500; color: #202124; }
+
+.mock-stars { letter-spacing: 2px; line-height: 1; }
+.mock-stars--full { font-size: 21px; color: #fbbc05; margin-bottom: 10px; }
+.mock-stars--low  { font-size: 15px; color: #fcd34d; }
+
+.mock-text {
+  font-size: 13px;
+  line-height: 1.5;
+  color: #3c4043;
+  padding: 9px 11px;
+  border: 1px solid #dadce0;
+  border-radius: 7px;
+  margin-bottom: 12px;
+}
+
+.mock-send {
+  padding: 9px 0;
+  text-align: center;
+  border-radius: 7px;
+  font-size: 13px;
+  font-weight: 500;
+}
+.mock-send--google { background: #1a73e8; color: #fff; }
+
+/* --- grana NE: privatna forma na mail vlasniku --- */
+
+.mock--mail { background: #1b1c2b; border: 1px solid color-mix(in srgb, var(--color-no) 40%, transparent); }
+.mock--mail .mock-bar {
+  background: color-mix(in srgb, var(--color-no) 15%, #14151f);
+  color: var(--color-no-soft);
+  border-bottom: 1px solid color-mix(in srgb, var(--color-no) 32%, transparent);
+}
+.mock-lock { font-size: 11px; flex: none; }
+.mock-tag--private {
+  background: color-mix(in srgb, var(--color-no) 26%, transparent);
+  color: var(--color-no-soft);
+}
+
+.mock-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 9px 0;
+  border-bottom: 1px solid color-mix(in srgb, #fff 9%, transparent);
+}
+.mock-row--stack {
+  display: block;
+  border-bottom: 0;
+  padding-bottom: 4px;
+}
+.mock-label {
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: .07em;
+  color: color-mix(in srgb, #fff 48%, transparent);
+  flex: none;
+}
+.mock-to {
+  font-size: 13px;
+  color: #fff;
+  font-weight: 500;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.mock-area {
+  margin-top: 8px;
+  font-size: 13px;
+  line-height: 1.5;
+  color: color-mix(in srgb, #fff 78%, transparent);
+  padding: 10px 11px;
+  border-radius: 7px;
+  background: color-mix(in srgb, #000 28%, transparent);
+  border: 1px solid color-mix(in srgb, #fff 12%, transparent);
+}
+.mock-send--mail {
+  margin-top: 13px;
+  background: var(--color-no);
+  color: #2a1d05;
+}
+
+.demo-note {
+  font-size: 13.5px;
+  line-height: 1.55;
+  color: color-mix(in srgb, #fff 74%, transparent);
+}
 
 .demo-outcome {
   display: inline-block;

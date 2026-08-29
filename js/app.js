@@ -345,24 +345,63 @@ function initDemo() {
         </div>
       </div>`,
 
+    /* Maketa javne Google recenzije. Statična — ništa se ne upisuje
+       ni ne šalje, služi samo da vlasnik vidi što gost dobije. */
     yes: () => `
-      <div class="demo-step">
-        <div class="demo-stars">★★★★★</div>
-        <h4>Otvara se Google recenzija</h4>
-        <p>Zadovoljan gost ide ravno na tvoj javni Google profil i ostavlja peticu.</p>
-        <span class="demo-outcome demo-outcome--yes">Javna recenzija · diže ti rejting</span>
+      <div class="demo-step demo-step--wide">
+        <div class="mock mock--google">
+          <div class="mock-bar">
+            <span class="mock-dot"></span>
+            <span class="mock-url">google.com/maps</span>
+            <span class="mock-tag mock-tag--public">Javno</span>
+          </div>
+          <div class="mock-body">
+            <div class="mock-head">
+              <span class="mock-logo">G</span>
+              <span class="mock-title">Tvoj obrt</span>
+            </div>
+            <div class="mock-stars mock-stars--full">★★★★★</div>
+            <div class="mock-text">Odlična usluga, sve pohvale!</div>
+            <div class="mock-send mock-send--google">Objavi na Googleu</div>
+          </div>
+        </div>
+        <p class="demo-note">Zadovoljan gost ide ravno na tvoj javni Google profil i ostavlja peticu.</p>
+        <span class="demo-outcome demo-outcome--yes">Javno na Googleu · diže ti rejting</span>
         <div class="demo-actions">
-          <button class="demo-btn demo-btn--ghost" data-go="ask">Probaj drugi odgovor</button>
+          <button class="demo-btn demo-btn--ghost" data-go="no">Vidi što se dogodi ako NE</button>
         </div>
       </div>`,
 
+    /* Maketa privatne forme koja ide vlasniku na mail. Naglašeno je da
+       ovo NIJE Google: druga traka, adresa primatelja, oznaka Privatno. */
     no: () => `
-      <div class="demo-step">
-        <h4>Otvara se privatna forma</h4>
-        <p>Nezadovoljan gost piše tebi, a ne Googleu. Saznaješ što ne valja i imaš priliku popraviti — bez javne jedinice.</p>
-        <span class="demo-outcome demo-outcome--no">Privatno · ide samo tebi</span>
+      <div class="demo-step demo-step--wide">
+        <div class="mock mock--mail">
+          <div class="mock-bar">
+            <span class="mock-lock">🔒</span>
+            <span class="mock-url">privatna forma — ne ide na Google</span>
+            <span class="mock-tag mock-tag--private">Privatno</span>
+          </div>
+          <div class="mock-body">
+            <div class="mock-row">
+              <span class="mock-label">Šalje se na</span>
+              <span class="mock-to">vlasnik@tvojobrt.hr</span>
+            </div>
+            <div class="mock-row">
+              <span class="mock-label">Ocjena</span>
+              <span class="mock-stars mock-stars--low">★★☆☆☆</span>
+            </div>
+            <div class="mock-row mock-row--stack">
+              <span class="mock-label">Što nije bilo u redu?</span>
+              <div class="mock-area">Čekali smo predugo za stolom.</div>
+            </div>
+            <div class="mock-send mock-send--mail">Pošalji vlasniku</div>
+          </div>
+        </div>
+        <p class="demo-note">Nezadovoljan gost piše tebi na mail, a ne Googleu. Saznaješ što ne valja i imaš priliku popraviti — bez javne jedinice.</p>
+        <span class="demo-outcome demo-outcome--no">Stiže ti na mail · ne pojavljuje se javno</span>
         <div class="demo-actions">
-          <button class="demo-btn demo-btn--ghost" data-go="ask">Probaj drugi odgovor</button>
+          <button class="demo-btn demo-btn--ghost" data-go="yes">Vidi što se dogodi ako DA</button>
         </div>
       </div>`
   };
