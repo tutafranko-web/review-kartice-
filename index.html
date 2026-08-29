@@ -102,26 +102,39 @@
           </ol>
         </div>
 
-        <!-- scena: kartica + telefon, sve crtano CSS-om -->
+        <!-- scena: stvarna kartica + telefon s pravim Google obrascem -->
         <div class="tap" id="tap" data-step="1" aria-hidden="true">
           <div class="tap-waves"><i></i><i></i><i></i></div>
 
-          <div class="tap-card">
-            <span class="tap-card-top">Review Us On</span>
-            <span class="tap-card-g">G</span>
-            <span class="tap-card-stars">★★★★★</span>
-          </div>
+          <img class="tap-card" src="assets/card-blue.png" alt="">
 
           <div class="tap-phone">
             <div class="tap-screen">
               <div class="tap-idle"></div>
-              <div class="tap-review">
-                <span class="tap-bar tap-bar-url"></span>
-                <span class="tap-biz"></span>
-                <div class="tap-stars"><i></i><i></i><i></i><i></i><i></i></div>
-                <span class="tap-bar tap-bar-1"></span>
-                <span class="tap-bar tap-bar-2"></span>
-                <span class="tap-send">Objavi</span>
+
+              <!-- obrazac za recenziju, kakav gost stvarno vidi -->
+              <div class="rw">
+                <div class="rw-bar">
+                  <span class="rw-lock"></span>
+                  <span class="rw-host">google.com</span>
+                </div>
+
+                <div class="rw-user">
+                  <span class="rw-av">A</span>
+                  <span class="rw-who">
+                    <b>Ana K.</b>
+                    <em>Javno objavljivanje na Googleu</em>
+                  </span>
+                </div>
+
+                <div class="rw-stars"><i></i><i></i><i></i><i></i><i></i></div>
+
+                <div class="rw-field">
+                  <span class="rw-typed" id="tapTyped"></span><span class="rw-caret"></span>
+                </div>
+
+                <div class="rw-photo">Dodajte fotografije</div>
+                <div class="rw-post">Objavi</div>
               </div>
             </div>
           </div>

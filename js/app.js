@@ -145,22 +145,46 @@ function initProgress() {
    recenzija na ekranu. Koraci se izmjenjuju, aktivni se ističe.
    ========================================================================= */
 
+const REVIEW_TEXT = "Odlična usluga, ljubazno osoblje. Rado se vraćamo!";
+
 function initTapSequence() {
   const section = document.querySelector(".s-kako");
   const tap     = document.getElementById("tap");
+  const typed   = document.getElementById("tapTyped");
   const steps   = [...document.querySelectorAll(".step")];
   if (!section || !tap || !steps.length) return;
+
+  let typeTimer = null;
+
+  /* tekst se ispisuje slovo po slovo tek kad gost dođe do trećeg koraka */
+  function startTyping() {
+    if (!typed) return;
+    clearInterval(typeTimer);
+    let i = 0;
+    typed.textContent = "";
+    typeTimer = setInterval(() => {
+      typed.textContent = REVIEW_TEXT.slice(0, ++i);
+      if (i >= REVIEW_TEXT.length) clearInterval(typeTimer);
+    }, 45);
+  }
+
+  function stopTyping() {
+    clearInterval(typeTimer);
+    if (typed) typed.textContent = "";
+  }
 
   function setStep(n) {
     if (tap.dataset.step === String(n)) return;
     tap.dataset.step = n;
     steps.forEach(s => s.classList.toggle("is-on", s.dataset.step === String(n)));
+    if (n === 3) setTimeout(startTyping, 850); else stopTyping();
   }
 
   /* bez skrol-animacije svi koraci stoje otvoreni, scena na zadnjem stanju */
   if (REDUCED_MOTION || typeof ScrollTrigger === "undefined") {
     steps.forEach(s => s.classList.add("is-on"));
     tap.dataset.step = "3";
+    if (typed) typed.textContent = REVIEW_TEXT;
     return;
   }
 

@@ -462,7 +462,7 @@ section[id] { scroll-margin-top: 84px; }
 /* NFC valovi — vidljivi samo u koraku 2, između telefona i kartice */
 .tap-waves {
   position: absolute;
-  left: 50%; bottom: 78px;
+  left: 50%; bottom: 140px;
   width: 0; height: 0;
   opacity: 0;
   transition: opacity .4s ease;
@@ -486,39 +486,21 @@ section[id] { scroll-margin-top: 84px; }
   100% { transform: scale(2.9); opacity: 0; }
 }
 
-/* kartica na stolu — leži ravno, telefon joj prilazi odozgo */
+/* stvarna kartica koja se prodaje — ista slika kao u heroju */
 .tap-card {
   position: absolute;
-  left: 50%; bottom: 20px;
-  width: 132px; height: 84px;
-  margin-left: -66px;
-  border-radius: 9px;
-  background: linear-gradient(150deg, #23262f, #101218);
-  box-shadow: var(--shadow-lg);
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  gap: 2px;
-  transform: perspective(600px) rotateX(52deg);
-  transition: box-shadow .45s ease;
+  left: 50%; bottom: 0;
+  width: 118px;
+  height: auto;
+  margin-left: -59px;
+  filter: drop-shadow(0 14px 20px rgba(0, 0, 0, .55));
+  transition: filter .45s ease, transform .45s ease;
 }
 .tap[data-step="2"] .tap-card {
-  box-shadow: var(--shadow-lg), 0 0 0 1px color-mix(in srgb, var(--color-accent) 55%, transparent);
+  filter: drop-shadow(0 14px 20px rgba(0, 0, 0, .55))
+          drop-shadow(0 0 12px color-mix(in srgb, var(--color-accent) 75%, transparent));
+  transform: scale(1.03);
 }
-.tap-card-top {
-  font-size: 7px;
-  letter-spacing: .04em;
-  color: color-mix(in srgb, #fff 55%, transparent);
-}
-.tap-card-g {
-  font-family: var(--font-heading);
-  font-size: 21px;
-  line-height: 1;
-  font-weight: 500;
-  color: #fff;
-}
-.tap-card-stars { font-size: 8px; letter-spacing: 1px; color: #fbbf24; }
 
 /* telefon — spušta se prema kartici i vraća se gore s recenzijom.
    Pomiče se preko `bottom` da uvijek ostane razmak iznad kartice
@@ -526,7 +508,7 @@ section[id] { scroll-margin-top: 84px; }
 .tap-phone {
   position: absolute;
   left: 50%;
-  bottom: 178px;
+  bottom: 205px;
   z-index: 2;
   width: 148px;
   height: 282px;
@@ -537,8 +519,8 @@ section[id] { scroll-margin-top: 84px; }
   box-shadow: var(--shadow-lg);
   transition: bottom .8s cubic-bezier(.22,.9,.3,1);
 }
-.tap[data-step="2"] .tap-phone { bottom: 90px; }
-.tap[data-step="3"] .tap-phone { bottom: 148px; }
+.tap[data-step="2"] .tap-phone { bottom: 152px; }
+.tap[data-step="3"] .tap-phone { bottom: 190px; }
 
 .tap-screen {
   position: relative;
@@ -559,61 +541,137 @@ section[id] { scroll-margin-top: 84px; }
 }
 .tap[data-step="3"] .tap-idle { opacity: 0; }
 
-/* ekran recenzije u koraku 3 */
-.tap-review {
+/* --- obrazac za recenziju, po uzoru na pravi Google ekran --- */
+
+.rw {
   position: absolute;
   inset: 0;
-  padding: 14px 12px;
   display: flex;
   flex-direction: column;
-  align-items: center;
-  gap: 9px;
-  background: #17181d;
+  background: #1f1f1f;
+  color: #e8eaed;
   opacity: 0;
-  transform: translateY(10px);
-  transition: opacity .45s ease .1s, transform .45s ease .1s;
+  transform: translateY(8px);
+  transition: opacity .4s ease .08s, transform .4s ease .08s;
 }
-.tap[data-step="3"] .tap-review { opacity: 1; transform: none; }
+.tap[data-step="3"] .rw { opacity: 1; transform: none; }
 
-.tap-bar {
-  display: block;
-  height: 6px;
-  border-radius: 3px;
-  background: color-mix(in srgb, #fff 13%, transparent);
+.rw-bar {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 5px;
+  padding: 7px 8px;
+  background: #2d2e30;
+  border-bottom: 1px solid #3c4043;
 }
-.tap-bar-url { width: 78%; height: 12px; border-radius: 6px; margin-bottom: 4px; }
-.tap-biz {
-  width: 46px; height: 46px;
+.rw-lock {
+  width: 7px; height: 6px;
+  border-radius: 1px;
+  background: #9aa0a6;
+  position: relative;
+  flex: none;
+}
+.rw-lock::before {
+  content: "";
+  position: absolute;
+  left: 1.5px; top: -3px;
+  width: 4px; height: 4px;
+  border: 1px solid #9aa0a6;
+  border-bottom: 0;
+  border-radius: 2px 2px 0 0;
+}
+.rw-host { font-size: 8px; color: #bdc1c6; letter-spacing: .01em; }
+
+.rw-user {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 9px 10px 7px;
+}
+.rw-av {
+  width: 20px; height: 20px;
   border-radius: 50%;
-  background: conic-gradient(#ea4335 0 25%, #fbbc05 0 50%, #34a853 0 75%, #4285f4 0);
-  opacity: .9;
+  background: #8ab4f8;
+  color: #202124;
+  font-size: 10px;
+  font-weight: 600;
+  display: grid;
+  place-items: center;
+  flex: none;
 }
-.tap-bar-1 { width: 82%; }
-.tap-bar-2 { width: 60%; }
+.rw-who { display: flex; flex-direction: column; line-height: 1.25; min-width: 0; }
+.rw-who b { font-size: 9px; font-weight: 500; color: #e8eaed; }
+.rw-who em {
+  font-style: normal;
+  font-size: 7px;
+  color: #9aa0a6;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
 
-.tap-stars { display: flex; gap: 4px; }
-.tap-stars i {
-  width: 15px; height: 15px;
-  background: color-mix(in srgb, #fff 16%, transparent);
+.rw-stars {
+  display: flex;
+  gap: 5px;
+  padding: 2px 10px 9px;
+}
+.rw-stars i {
+  width: 17px; height: 17px;
+  background: #5f6368;
   clip-path: polygon(50% 0%,61% 35%,98% 35%,68% 57%,79% 91%,50% 70%,21% 91%,32% 57%,2% 35%,39% 35%);
-  transition: background-color .3s ease, transform .3s ease;
+  transition: background-color .28s ease, transform .28s ease;
 }
-.tap[data-step="3"] .tap-stars i { background: #fbbf24; transform: scale(1.12); }
-.tap[data-step="3"] .tap-stars i:nth-child(1) { transition-delay: .35s; }
-.tap[data-step="3"] .tap-stars i:nth-child(2) { transition-delay: .47s; }
-.tap[data-step="3"] .tap-stars i:nth-child(3) { transition-delay: .59s; }
-.tap[data-step="3"] .tap-stars i:nth-child(4) { transition-delay: .71s; }
-.tap[data-step="3"] .tap-stars i:nth-child(5) { transition-delay: .83s; }
+.tap[data-step="3"] .rw-stars i { background: #fdd663; transform: scale(1.1); }
+.tap[data-step="3"] .rw-stars i:nth-child(1) { transition-delay: .30s; }
+.tap[data-step="3"] .rw-stars i:nth-child(2) { transition-delay: .40s; }
+.tap[data-step="3"] .rw-stars i:nth-child(3) { transition-delay: .50s; }
+.tap[data-step="3"] .rw-stars i:nth-child(4) { transition-delay: .60s; }
+.tap[data-step="3"] .rw-stars i:nth-child(5) { transition-delay: .70s; }
 
-.tap-send {
-  margin-top: auto;
-  width: 100%;
-  padding: 8px 0;
+/* polje u koje se "tipka" */
+.rw-field {
+  margin: 0 10px;
+  min-height: 52px;
+  padding: 7px 8px;
+  border: 1px solid #8ab4f8;
+  border-radius: 5px;
+  font-size: 8.5px;
+  line-height: 1.5;
+  color: #e8eaed;
+  text-align: left;
+  word-break: break-word;
+}
+.rw-caret {
+  display: inline-block;
+  width: 1px;
+  height: 9px;
+  margin-left: 1px;
+  vertical-align: -1px;
+  background: #8ab4f8;
+}
+.tap[data-step="3"] .rw-caret { animation: rw-blink 1.05s step-end infinite; }
+@keyframes rw-blink { 0%, 100% { opacity: 1; } 50% { opacity: 0; } }
+
+.rw-photo {
+  margin: 9px 10px 0;
+  padding: 6px 0;
   text-align: center;
-  font-size: 11px;
-  border-radius: 6px;
-  background: color-mix(in srgb, var(--color-accent) 82%, #fff);
-  color: #14121f;
+  font-size: 8px;
+  color: #8ab4f8;
+  border: 1px solid #3c4043;
+  border-radius: 999px;
+}
+
+.rw-post {
+  margin: auto 10px 11px;
+  padding: 7px 0;
+  text-align: center;
+  font-size: 9px;
+  font-weight: 500;
+  border-radius: 999px;
+  background: #8ab4f8;
+  color: #202124;
 }
 
 /* =========================================================================
@@ -1330,16 +1388,16 @@ section[id] { scroll-margin-top: 84px; }
     justify-items: center;
   }
   .kako-copy { order: 2; width: 100%; }
-  .tap { order: 1; width: 210px; height: min(42vh, 340px); }
+  .tap { order: 1; width: 220px; height: min(46vh, 380px); }
   .tap-phone {
-    width: 112px; height: 208px; margin-left: -56px;
-    border-radius: 18px; bottom: 124px;
+    width: 130px; height: 248px; margin-left: -65px;
+    border-radius: 19px; bottom: 132px;
   }
-  .tap[data-step="2"] .tap-phone { bottom: 70px; }
-  .tap[data-step="3"] .tap-phone { bottom: 104px; }
-  .tap-screen { border-radius: 14px; }
-  .tap-card { width: 104px; height: 66px; margin-left: -52px; bottom: 14px; }
-  .tap-waves { bottom: 60px; }
+  .tap[data-step="2"] .tap-phone { bottom: 96px; }
+  .tap[data-step="3"] .tap-phone { bottom: 124px; }
+  .tap-screen { border-radius: 15px; }
+  .tap-card { width: 88px; margin-left: -44px; bottom: 0; }
+  .tap-waves { bottom: 92px; }
   .kako-copy h2 { font-size: clamp(24px, 6vw, 32px); }
   .steps { margin-top: 16px; gap: 2px; }
   .step { padding: 11px 14px 11px 12px; gap: 12px; }
@@ -1352,16 +1410,16 @@ section[id] { scroll-margin-top: 84px; }
   .s-kako { height: 300vh; }
   .kako-inner { grid-template-columns: 1fr auto; gap: 24px; }
   .kako-copy { order: 1; }
-  .tap { order: 2; width: 175px; height: min(84vh, 285px); }
+  .tap { order: 2; width: 180px; height: min(86vh, 300px); }
   .tap-phone {
-    width: 96px; height: 176px; margin-left: -48px;
-    border-radius: 16px; bottom: 100px;
+    width: 110px; height: 205px; margin-left: -55px;
+    border-radius: 16px; bottom: 92px;
   }
-  .tap[data-step="2"] .tap-phone { bottom: 58px; }
-  .tap[data-step="3"] .tap-phone { bottom: 86px; }
-  .tap-screen { border-radius: 12px; }
-  .tap-card { width: 88px; height: 56px; margin-left: -44px; bottom: 12px; }
-  .tap-waves { bottom: 50px; }
+  .tap[data-step="2"] .tap-phone { bottom: 66px; }
+  .tap[data-step="3"] .tap-phone { bottom: 84px; }
+  .tap-screen { border-radius: 13px; }
+  .tap-card { width: 74px; margin-left: -37px; bottom: 0; }
+  .tap-waves { bottom: 64px; }
   .steps { margin-top: 12px; }
   .step { padding: 8px 12px; }
   .step p { display: none; }
