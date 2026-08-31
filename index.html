@@ -3,6 +3,22 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
+
+<!-- Content-Security-Policy. Mora doći prije bilo kojeg resursa jer vrijedi
+     samo za sadržaj iza sebe. Stranica je potpuno samoposlužena (skripte,
+     stilovi, fontovi, slike), pa je politika stroga: sve što nije s ovog
+     podrijetla je zabranjeno. Ako se ikad doda vanjski resurs (npr. analitika
+     ili font s CDN-a), OVDJE mu treba dopustiti podrijetlo, inače ga preglednik
+     blokira. 'self' pokriva js/, css/, assets/; data: je samo za favicon.
+     connect-src je 'self' (ne 'none'): stranica sama ne radi nijedan fetch, ali
+     'none' bi blokirao i alate koji isto-izvorno dohvacaju robots.txt (npr.
+     PageSpeed audit), a i dalje sprjecava slanje podataka na tude domene.
+     Napomena: frame-ancestors i X-Frame-Options ne rade preko <meta> nego samo
+     preko HTTP zaglavlja — GitHub Pages ih ne dopušta, pa zaštita od uokvirenja
+     stiže tek s vlastitom domenom (vidi README, Sigurnost). -->
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self'; style-src 'self'; font-src 'self'; img-src 'self' data:; connect-src 'self'; base-uri 'none'; form-action 'none'; manifest-src 'none'; upgrade-insecure-requests">
+<meta name="referrer" content="strict-origin-when-cross-origin">
+
 <title>NFC kartice za Google recenzije — reviewcard.hr</title>
 <meta name="description" content="NFC kartica za Google recenzije. Gost prisloni telefon i u sekundi je na tvom Google profilu — bez aplikacije i bez QR koda. Cijena od 12 € po kartici.">
 
@@ -38,7 +54,7 @@
 <link rel="preload" href="assets/fonts/inter-500.woff2" as="font" type="font/woff2" crossorigin>
 <!-- ?v= se podigne pri svakoj izmjeni; bez toga preglednik do 10 minuta
      (a na mobitelu i dulje) servira staru verziju iz cachea -->
-<link rel="stylesheet" href="css/style.css?v=12">
+<link rel="stylesheet" href="css/style.css?v=13">
 
 <!-- Strukturirani podaci. Cijene su one koje stvarno stoje u sekciji Paketi —
      ako se cjenik promijeni, promijeniti i ovdje, inače Google javlja
@@ -115,7 +131,7 @@
 
   <!-- ================= 0. HEADER ================= -->
   <nav class="nav">
-    <span class="nav-brand">reviewcard<span style="color:var(--color-accent);">.hr</span></span>
+    <span class="nav-brand">reviewcard<span class="u-brand-dot">.hr</span></span>
     <div class="nav-links">
       <a href="#proizvodi">Kartice</a>
       <a href="#kako">Kako radi</a>
@@ -128,7 +144,7 @@
   <!-- ================= 2. HERO ================= -->
   <section class="hero">
     <div data-reveal>
-      <span class="tag tag-accent" style="margin-bottom:18px;">NFC Google recenzije</span>
+      <span class="tag tag-accent u-mt-hero-tag">NFC Google recenzije</span>
       <h1>
         <span>Više recenzija.</span>
         <span class="accent">Jednim dodirom.</span>
@@ -270,7 +286,7 @@
             <span class="price-unit">/ komad</span>
           </div>
           <a class="btn btn-primary btn-block" data-wa="crna" href="https://wa.me/385000000000?text=Pozdrav!%20Zelim%20naruciti%20CRNU%20Google%20review%20karticu%20(20%20EUR)." target="_blank" rel="noopener">Naruči na WhatsApp</a>
-          <a class="btn btn-secondary btn-block" href="#paketi" style="margin-top:10px;">Naruči</a>
+          <a class="btn btn-secondary btn-block u-mt-10" href="#paketi">Naruči</a>
         </div>
       </div>
 
@@ -290,7 +306,7 @@
             <span class="price-unit">/ komad</span>
           </div>
           <a class="btn btn-primary btn-block" data-wa="plava" href="https://wa.me/385000000000?text=Pozdrav!%20Zelim%20naruciti%20PLAVU%20Google%20review%20karticu%20(20%20EUR)." target="_blank" rel="noopener">Naruči na WhatsApp</a>
-          <a class="btn btn-secondary btn-block" href="#paketi" style="margin-top:10px;">Naruči</a>
+          <a class="btn btn-secondary btn-block u-mt-10" href="#paketi">Naruči</a>
         </div>
       </div>
 
@@ -334,7 +350,7 @@
 
   <!-- ================= 6. PAKETI ================= -->
   <section class="s-paketi" id="paketi">
-    <div class="section-head" style="max-width:680px;" data-reveal>
+    <div class="section-head u-narrow" data-reveal>
       <span class="tag tag-accent">Količinski popust</span>
       <h2>Više kartica, niža cijena</h2>
       <p>Slobodno miješaj crne i plave kartice u paketu — npr. 5 crnih i 5 plavih. Cijena vrijedi bez obzira na kombinaciju boja.</p>
@@ -344,7 +360,7 @@
       <div class="card pkg-card" data-tier="1">
         <span class="card-kicker">1 kartica</span>
         <div class="pkg-figure">20&nbsp;€</div>
-        <p class="card-body" style="color:color-mix(in srgb, var(--color-text) 60%, transparent);">20 € po kartici</p>
+        <p class="card-body u-muted-60">20 € po kartici</p>
         <a class="btn btn-secondary btn-block" data-wa="pkg1" href="https://wa.me/385000000000?text=Pozdrav!%20Zelim%20naruciti%201%20karticu%20(20%20EUR)." target="_blank" rel="noopener">Naruči</a>
       </div>
 
@@ -489,9 +505,9 @@
      manje (DNS + TLS), a nema ni rizika da izmijenjena datoteka na tuđem CDN-u
      izvrši svoj kod na ovoj stranici. Verzije: GSAP 3.15.0, Lenis 1.3.26.
      Za nadogradnju zamijeniti datoteke u js/vendor/ i provjeriti testovima. -->
-<script src="js/vendor/lenis.min.js?v=12" defer></script>
-<script src="js/vendor/gsap.min.js?v=12" defer></script>
-<script src="js/vendor/ScrollTrigger.min.js?v=12" defer></script>
-<script src="js/app.js?v=12" defer></script>
+<script src="js/vendor/lenis.min.js?v=13" defer></script>
+<script src="js/vendor/gsap.min.js?v=13" defer></script>
+<script src="js/vendor/ScrollTrigger.min.js?v=13" defer></script>
+<script src="js/app.js?v=13" defer></script>
 </body>
 </html>

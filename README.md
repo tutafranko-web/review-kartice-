@@ -1,12 +1,11 @@
 # reviewcard.hr
 
-Jednostranična prodajna stranica za NFC kartice za Google recenzije, s uvodnom
-scroll animacijom izrađenom iz videa.
+Jednostranična prodajna stranica za NFC kartice za Google recenzije.
 
 ## Pokretanje
 
 Stranica **mora** ići preko HTTP-a — otvaranje `index.html` dvoklikom (`file://`)
-ne učitava frameove.
+ne radi ispravno.
 
 ```bash
 npx serve .
@@ -21,12 +20,13 @@ Zatim otvoriti `http://localhost:8123`.
 ```
 index.html            devet sekcija, sav tekst
 css/style.css         design tokeni + layout
-js/app.js             animacija, kalkulator, demo, WhatsApp linkovi
-assets/               izresci kartica (crna, plava)
-frames/               201 webp framea uvodne animacije
+js/app.js             reveal, kalkulator, demo, WhatsApp linkovi
+js/vendor/            GSAP, ScrollTrigger, Lenis (samoposluženo)
+assets/               kartice (png + webp u 3 sirine), fontovi, og slika
 ```
 
-Bez buildera i bez ovisnosti. GSAP, ScrollTrigger i Lenis učitavaju se s CDN-a.
+Bez buildera i bez ovisnosti. Sve — skripte, stilovi, fontovi, slike —
+posluženo je s istog podrijetla; stranica ne poziva nijedan vanjski resurs.
 
 ## ⚠️ Prije objave
 
@@ -65,6 +65,57 @@ rok isporuke) uklonjena je na zahtjev. Stajala je prazna jer stvarnih brojki
 nije bilo, a izmišljene se ne stavljaju. Ako brojke jednom stignu, vraća se
 kao obična sekcija sa `.stats` gridom; kod je u povijesti (commit prije
 uklanjanja) zajedno s `initCounters` koji ih je brojao pri skrolu.
+
+## Brzina
+
+Cilj je bio visoka PageSpeed ocjena. Mjereno na živoj stranici, mobilno:
+Performance 99, ostale kategorije 100.
+
+- **Slike** su WebP u tri širine (`assets/card-*-320/640/960.webp`) uz `srcset`
+  i `sizes`. Izvorni `card-blue.png` (~290 kB) služio se i tamo gdje se
+  prikazuje na 76 px; sada preglednik bira širinu prema mjestu prikaza.
+- **Fontovi** su samoposluženi i **podskupljeni** na znakove koje stranica
+  koristi (`assets/fonts/inter-*.woff2`, ~55 kB umjesto 130 kB s CDN-a). Font
+  za prvi vidljivi tekst ide u `preload`.
+  - ⚠️ Podskup sadrži samo znakove s popisa. Doda li se tekst sa znakom koji
+    nije u njemu, iscrtat će se sustavnim fontom i odskakat. Tada ponovno
+    izraditi podskup: skinuti Inter s `fonts.googleapis.com/css2?...&text=<svi
+    znakovi>` (Google vraća `/l/font?kit=...`, ne `.woff2`), spremiti woff2 u
+    `assets/fonts/`.
+- **Biblioteke** (GSAP, ScrollTrigger, Lenis) su u `js/vendor/`, s `defer`.
+
+Slike kartica **moraju ostati prozirne**. Vektorski izvor je `card.html`
+(spremljen izvan repozitorija); u njemu `body` mora biti `transparent` —
+postavi li se boja, Puppeteerov `omitBackground` je ne uklanja i kutovi kartice
+ispadnu obojani (bilo je crno). WebP se radi s `-pix_fmt yuva420p`, inače
+ffmpeg izgubi alfa kanal.
+
+## Sigurnost
+
+- **Content-Security-Policy** je u `<meta>` tagu na vrhu `index.html`, i mora
+  ostati prvi jer vrijedi samo za sadržaj iza sebe. Politika je stroga
+  (`default-src 'none'`, sve ostalo `'self'`). Doda li se ikad vanjski resurs
+  (analitika, font ili slika s CDN-a), **ovdje mu treba dopustiti podrijetlo**,
+  inače ga preglednik blokira.
+- **Nema inline koda**: nijedan `<style>` blok, `style=` atribut ni `on*=`
+  rukovatelj. Zato CSP može biti bez `'unsafe-inline'`. Male stilske izmjene
+  rade se preko pomoćnih klasa (`.u-*` na vrhu `style.css`), ne inline.
+- **Demo escapea unos** prije umetanja u DOM (`esc()` u `initDemo`). To je
+  jedino mjesto gdje korisnički tekst ide u `innerHTML`. Provjereno s 12 XSS
+  payloada — nijedan se ne izvrši; ne dirati escaping.
+- **CTA gumbi imaju `href` upisan u HTML** (ne samo iz JS-a) pa odredište
+  postoji i za tražilice/agente; JS ga samo osvježava iz `WHATSAPP_NUMBER` i
+  javi u konzoli ako se broj u HTML-u i onaj u `app.js` raziđu.
+- **`frame-ancestors` / X-Frame-Options** ne rade preko `<meta>`, samo preko
+  HTTP zaglavlja. GitHub Pages ih ne dopušta, pa zaštita od uokvirenja
+  (clickjacking) stiže tek s vlastitom domenom i poslužiteljem koji šalje
+  zaglavlja. Za statičnu prodajnu stranicu bez prijave rizik je nizak.
+- **`llms.txt`** daje asistentima i agentima sažetak ponude i cijena, uz
+  izričitu napomenu da je broj rezervirano mjesto i da demo ništa ne šalje.
+- **Strix penetracijski test** nije pokrenut lokalno jer traži Docker (nije
+  instaliran) ili račun na app.strix.ai. Umjesto toga napadna površina —
+  koja je kod statične stranice mala — ručno je provjerena: XSS, sigurnost
+  vanjskih veza, sheme u `href`, miješani sadržaj, forme. Bez nalaza.
 
 ## Interakcije
 

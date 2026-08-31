@@ -1,4 +1,4 @@
-# NAPOMENA: na github.io adresi ova datoteka NEMA učinka. Tražilice čitaju
+# NAPOMENA: na github.io adresi ova datoteka nema ucinka. Trazilice citaju
 # robots.txt samo s korijena domene (tutafranko-web.github.io/robots.txt), a
 # taj korijen nije u ovom repozitoriju. Stoji ovdje da bude ispravna onog
 # trenutka kad stranica dobije vlastitu domenu (npr. reviewcard.hr).
@@ -6,22 +6,38 @@
 
 User-agent: *
 Allow: /
-
-# preview.html je alat za pregled na mobitelu, nije sadržaj za tražilice
 Disallow: /preview.html
 
-# Asistenti i agenti smiju čitati sadržaj — cilj je da stranicu mogu
-# preporučiti i točno prenijeti cijene. Sažetak je u /llms.txt.
+# Asistenti i agenti smiju citati sadrzaj: cilj je da stranicu mogu
+# preporuciti i tocno prenijeti cijene. Sazetak je u /llms.txt.
 User-agent: GPTBot
+Allow: /
+Disallow: /preview.html
+
 User-agent: OAI-SearchBot
+Allow: /
+Disallow: /preview.html
+
 User-agent: ChatGPT-User
+Allow: /
+Disallow: /preview.html
+
 User-agent: ClaudeBot
+Allow: /
+Disallow: /preview.html
+
 User-agent: Claude-User
-User-agent: Claude-SearchBot
+Allow: /
+Disallow: /preview.html
+
 User-agent: PerplexityBot
-User-agent: Perplexity-User
+Allow: /
+Disallow: /preview.html
+
 User-agent: Google-Extended
-User-agent: Applebot-Extended
+Allow: /
+Disallow: /preview.html
+
 User-agent: Bingbot
 Allow: /
 Disallow: /preview.html

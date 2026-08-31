@@ -99,6 +99,14 @@
 
 *, *::before, *::after { box-sizing: border-box; }
 
+/* Pomoćne klase — zamjenjuju inline style= atribute da Content-Security-Policy
+   može biti strog (style-src 'self', bez 'unsafe-inline'). Vidi CSP meta tag. */
+.u-brand-dot   { color: var(--color-accent); }
+.u-mt-hero-tag { margin-bottom: 18px; }
+.u-mt-10       { margin-top: 10px; }
+.u-narrow      { max-width: 680px; }
+.u-muted-60    { color: color-mix(in srgb, var(--color-text) 60%, transparent); }
+
 html {
   scroll-behavior: smooth;
   -webkit-text-size-adjust: 100%;
