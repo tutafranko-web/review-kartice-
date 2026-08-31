@@ -10,4 +10,20 @@ Allow: /
 # preview.html je alat za pregled na mobitelu, nije sadržaj za tražilice
 Disallow: /preview.html
 
+# Asistenti i agenti smiju čitati sadržaj — cilj je da stranicu mogu
+# preporučiti i točno prenijeti cijene. Sažetak je u /llms.txt.
+User-agent: GPTBot
+User-agent: OAI-SearchBot
+User-agent: ChatGPT-User
+User-agent: ClaudeBot
+User-agent: Claude-User
+User-agent: Claude-SearchBot
+User-agent: PerplexityBot
+User-agent: Perplexity-User
+User-agent: Google-Extended
+User-agent: Applebot-Extended
+User-agent: Bingbot
+Allow: /
+Disallow: /preview.html
+
 Sitemap: https://tutafranko-web.github.io/review-kartice-/sitemap.xml

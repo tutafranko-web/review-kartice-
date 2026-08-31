@@ -1,4 +1,38 @@
 /* =========================================================================
+   Inter, samoposlužen i podskupljen na 125 znakova koje stranica koristi.
+   Prije se učitavao s Google Fonts CDN-a: 130 kB i dva dodatna spajanja
+   (fonts.googleapis.com pa tek onda fonts.gstatic.com), a to je kašnjenje
+   išlo ravno u LCP jer je najveći element na stranici tekst.
+   Sada: 55 kB, bez vanjskih veza.
+
+   ⚠️ Podskup sadrži SAMO znakove s popisa. Ako se doda tekst sa znakom koji
+   nije u njemu (npr. drugi jezik ili neuobičajen simbol), taj će se znak
+   iscrtati sustavnim fontom i odskakat će. Tada ponovno pokrenuti
+   izradu podskupa (opisano u README-u, poglavlje Brzina).
+   ========================================================================= */
+@font-face {
+  font-family: 'Inter';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url('../assets/fonts/inter-400.woff2') format('woff2');
+}
+@font-face {
+  font-family: 'Inter';
+  font-style: normal;
+  font-weight: 500;
+  font-display: swap;
+  src: url('../assets/fonts/inter-500.woff2') format('woff2');
+}
+@font-face {
+  font-family: 'Inter';
+  font-style: normal;
+  font-weight: 600;
+  font-display: swap;
+  src: url('../assets/fonts/inter-600.woff2') format('woff2');
+}
+
+/* =========================================================================
    reviewcard.hr — stilovi
    -------------------------------------------------------------------------
    NAPOMENA O TOKENIMA: originalni "Nocturne" design system nije bio priložen
@@ -421,7 +455,10 @@ section[id] { scroll-margin-top: 84px; }
   padding: 15px 18px 15px 14px;
   border-radius: var(--radius-md);
   border-left: 1px solid transparent;
-  opacity: .32;
+  /* .32 je izgledalo bolje, ali nijedna boja teksta pri toj neprozirnosti ne
+     moze doci do omjera 4.5:1 — sama neprozirnost to onemogucuje. Na .75
+     tekst je citljiv, a aktivan korak i dalje odskace obrubom i podlogom. */
+  opacity: .75;
   transition: opacity .45s ease, background-color .45s ease, border-color .45s ease;
 }
 .step.is-on {
@@ -434,7 +471,8 @@ section[id] { scroll-margin-top: 84px; }
   font-family: var(--font-heading);
   font-size: 13px;
   line-height: 1.7;
-  color: color-mix(in srgb, var(--color-text) 45%, transparent);
+  /* 70% x neprozirnost .75 = 52.5% stvarno, tocno iznad praga od 51% */
+  color: color-mix(in srgb, var(--color-text) 70%, transparent);
   transition: color .45s ease;
 }
 .step.is-on .step-n { color: var(--color-accent); }
@@ -444,7 +482,7 @@ section[id] { scroll-margin-top: 84px; }
   font-size: 14px;
   line-height: 1.55;
   margin: 6px 0 0;
-  color: color-mix(in srgb, var(--color-text) 72%, transparent);
+  color: color-mix(in srgb, var(--color-text) 78%, transparent);
 }
 
 /* --- scena --- */
@@ -695,7 +733,7 @@ section[id] { scroll-margin-top: 84px; }
   font-size: clamp(20px, 3.4vw, 38px);
   font-weight: 500;
   letter-spacing: -0.01em;
-  color: color-mix(in srgb, var(--color-text) 26%, transparent);
+  color: color-mix(in srgb, var(--color-text) 55%, transparent);
 }
 .marquee-row i {
   font-style: normal;
@@ -873,7 +911,7 @@ section[id] { scroll-margin-top: 84px; }
   display: flex;
   justify-content: space-between;
   font-size: 12px;
-  color: color-mix(in srgb, var(--color-text) 45%, transparent);
+  color: color-mix(in srgb, var(--color-text) 58%, transparent);
 }
 
 .calc-out {
@@ -889,7 +927,7 @@ section[id] { scroll-margin-top: 84px; }
   font-size: 12px;
   text-transform: uppercase;
   letter-spacing: .08em;
-  color: color-mix(in srgb, var(--color-text) 50%, transparent);
+  color: color-mix(in srgb, var(--color-text) 58%, transparent);
   margin-bottom: 8px;
 }
 .calc-cell .value {
@@ -1393,7 +1431,7 @@ section[id] { scroll-margin-top: 84px; }
 .s-kontakt .note {
   font-size: 13px;
   margin: 20px 0 0;
-  color: color-mix(in srgb, var(--color-text) 50%, transparent);
+  color: color-mix(in srgb, var(--color-text) 56%, transparent);
 }
 
 .site-footer {

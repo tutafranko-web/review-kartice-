@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="hr">
 <head>
 <meta charset="utf-8">
@@ -32,12 +32,13 @@
 <meta name="twitter:image" content="https://tutafranko-web.github.io/review-kartice-/assets/og.png">
 
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%23161826'/%3E%3Cpath d='M16 6l3.1 6.3 6.9 1-5 4.9 1.2 6.9-6.2-3.3-6.2 3.3 1.2-6.9-5-4.9 6.9-1z' fill='%239184d9'/%3E%3C/svg%3E">
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<!-- Inter je samoposlužen i podskupljen (vidi vrh style.css). Fontovi za tekst
+     koji se prvi iscrtava idu u preload da ne čekaju parsiranje CSS-a. -->
+<link rel="preload" href="assets/fonts/inter-400.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="assets/fonts/inter-500.woff2" as="font" type="font/woff2" crossorigin>
 <!-- ?v= se podigne pri svakoj izmjeni; bez toga preglednik do 10 minuta
      (a na mobitelu i dulje) servira staru verziju iz cachea -->
-<link rel="stylesheet" href="css/style.css?v=11">
+<link rel="stylesheet" href="css/style.css?v=12">
 
 <!-- Strukturirani podaci. Cijene su one koje stvarno stoje u sekciji Paketi —
      ako se cjenik promijeni, promijeniti i ovdje, inače Google javlja
@@ -121,7 +122,7 @@
       <a href="#paketi">Paketi</a>
       <a href="#sustav">Napredni sustav</a>
     </div>
-    <a class="btn btn-primary" data-wa="hero" target="_blank" rel="noopener">Naruči</a>
+    <a class="btn btn-primary" data-wa="hero" href="https://wa.me/385000000000?text=Pozdrav!%20Zanimaju%20me%20Google%20review%20NFC%20kartice." target="_blank" rel="noopener">Naruči</a>
   </nav>
 
   <!-- ================= 2. HERO ================= -->
@@ -135,7 +136,7 @@
       <p class="hero-lead">Gost prisloni telefon na karticu i u sekundi je na vašem Google profilu. Bez aplikacija, bez QR gužve — samo tap.</p>
       <div class="hero-actions">
         <a class="btn btn-secondary" href="#kako">Pogledaj kako radi</a>
-        <a class="btn btn-primary" data-wa="hero" target="_blank" rel="noopener">Naruči</a>
+        <a class="btn btn-primary" data-wa="hero" href="https://wa.me/385000000000?text=Pozdrav!%20Zanimaju%20me%20Google%20review%20NFC%20kartice." target="_blank" rel="noopener">Naruči</a>
       </div>
       <p class="hero-trust">★★★★★  Radi na svim modernim Android i iPhone uređajima</p>
     </div>
@@ -143,10 +144,18 @@
     <div class="hero-art" data-reveal>
       <div class="hero-art-glow" aria-hidden="true"></div>
       <div class="card-tile card-tile--black">
-        <img src="assets/card-black.png" alt="Crna NFC kartica za Google recenzije">
+        <img src="assets/card-black-320.webp"
+             srcset="assets/card-black-320.webp 320w, assets/card-black-640.webp 640w, assets/card-black-960.webp 960w"
+             sizes="(max-width:480px) 122px, (max-width:900px) 150px, 200px"
+             width="1220" height="1460" fetchpriority="high" decoding="async"
+             alt="Crna NFC kartica za Google recenzije">
       </div>
       <div class="card-tile card-tile--blue">
-        <img src="assets/card-blue.png?v=9" alt="Plava NFC kartica za Google recenzije">
+        <img src="assets/card-blue-320.webp"
+             srcset="assets/card-blue-320.webp 320w, assets/card-blue-640.webp 640w, assets/card-blue-960.webp 960w"
+             sizes="(max-width:480px) 122px, (max-width:900px) 150px, 200px"
+             width="1220" height="1460" fetchpriority="high" decoding="async"
+             alt="Plava NFC kartica za Google recenzije">
       </div>
     </div>
   </section>
@@ -195,7 +204,10 @@
         <div class="tap" id="tap" data-step="1" aria-hidden="true">
           <div class="tap-waves"><i></i><i></i><i></i></div>
 
-          <img class="tap-card" src="assets/card-blue.png?v=9" alt="">
+          <img class="tap-card" src="assets/card-blue-320.webp"
+               srcset="assets/card-blue-320.webp 320w, assets/card-blue-640.webp 640w"
+               sizes="(max-width:720px) 68px, (max-width:900px) 76px, 118px"
+               width="1220" height="1460" loading="lazy" decoding="async" alt="">
 
           <div class="tap-phone">
             <div class="tap-screen">
@@ -244,7 +256,11 @@
 
       <div class="card product-card">
         <div class="product-well">
-          <img src="assets/card-black.png" alt="Crna NFC kartica za Google recenzije">
+          <img src="assets/card-black-640.webp"
+               srcset="assets/card-black-320.webp 320w, assets/card-black-640.webp 640w, assets/card-black-960.webp 960w"
+               sizes="(max-width:900px) 50vw, 300px"
+               width="1220" height="1460" loading="lazy" decoding="async"
+               alt="Crna NFC kartica za Google recenzije">
         </div>
         <div class="product-body">
           <div class="product-head"><h3>Crna kartica</h3></div>
@@ -253,14 +269,18 @@
             <span class="price">20&nbsp;€</span>
             <span class="price-unit">/ komad</span>
           </div>
-          <a class="btn btn-primary btn-block" data-wa="crna" target="_blank" rel="noopener">Naruči na WhatsApp</a>
+          <a class="btn btn-primary btn-block" data-wa="crna" href="https://wa.me/385000000000?text=Pozdrav!%20Zelim%20naruciti%20CRNU%20Google%20review%20karticu%20(20%20EUR)." target="_blank" rel="noopener">Naruči na WhatsApp</a>
           <a class="btn btn-secondary btn-block" href="#paketi" style="margin-top:10px;">Naruči</a>
         </div>
       </div>
 
       <div class="card product-card">
         <div class="product-well">
-          <img src="assets/card-blue.png?v=9" alt="Plava NFC kartica za Google recenzije">
+          <img src="assets/card-blue-640.webp"
+               srcset="assets/card-blue-320.webp 320w, assets/card-blue-640.webp 640w, assets/card-blue-960.webp 960w"
+               sizes="(max-width:900px) 50vw, 300px"
+               width="1220" height="1460" loading="lazy" decoding="async"
+               alt="Plava NFC kartica za Google recenzije">
         </div>
         <div class="product-body">
           <div class="product-head"><h3>Plava kartica</h3></div>
@@ -269,7 +289,7 @@
             <span class="price">20&nbsp;€</span>
             <span class="price-unit">/ komad</span>
           </div>
-          <a class="btn btn-primary btn-block" data-wa="plava" target="_blank" rel="noopener">Naruči na WhatsApp</a>
+          <a class="btn btn-primary btn-block" data-wa="plava" href="https://wa.me/385000000000?text=Pozdrav!%20Zelim%20naruciti%20PLAVU%20Google%20review%20karticu%20(20%20EUR)." target="_blank" rel="noopener">Naruči na WhatsApp</a>
           <a class="btn btn-secondary btn-block" href="#paketi" style="margin-top:10px;">Naruči</a>
         </div>
       </div>
@@ -325,14 +345,14 @@
         <span class="card-kicker">1 kartica</span>
         <div class="pkg-figure">20&nbsp;€</div>
         <p class="card-body" style="color:color-mix(in srgb, var(--color-text) 60%, transparent);">20 € po kartici</p>
-        <a class="btn btn-secondary btn-block" data-wa="pkg1" target="_blank" rel="noopener">Naruči</a>
+        <a class="btn btn-secondary btn-block" data-wa="pkg1" href="https://wa.me/385000000000?text=Pozdrav!%20Zelim%20naruciti%201%20karticu%20(20%20EUR)." target="_blank" rel="noopener">Naruči</a>
       </div>
 
       <div class="card pkg-card" data-tier="5">
         <span class="card-kicker">5 kartica</span>
         <div class="pkg-figure">75&nbsp;€</div>
         <p class="card-body save">15 € po kartici · ušteda 25 €</p>
-        <a class="btn btn-secondary btn-block" data-wa="pkg5" target="_blank" rel="noopener">Naruči</a>
+        <a class="btn btn-secondary btn-block" data-wa="pkg5" href="https://wa.me/385000000000?text=Pozdrav!%20Zelim%20naruciti%20paket%205%20kartica%20(75%20EUR)." target="_blank" rel="noopener">Naruči</a>
       </div>
 
       <div class="card pkg-card pkg-card--featured" data-tier="10">
@@ -340,14 +360,14 @@
         <span class="card-kicker">10 kartica</span>
         <div class="pkg-figure">120&nbsp;€</div>
         <p class="card-body save">12 € po kartici · ušteda 80 €</p>
-        <a class="btn btn-primary btn-block" data-wa="pkg10" target="_blank" rel="noopener">Naruči</a>
+        <a class="btn btn-primary btn-block" data-wa="pkg10" href="https://wa.me/385000000000?text=Pozdrav!%20Zelim%20naruciti%20paket%2010%20kartica%20(120%20EUR)." target="_blank" rel="noopener">Naruči</a>
       </div>
 
       <div class="card pkg-card" data-tier="11">
         <span class="card-kicker">10+ kartica</span>
         <div class="pkg-figure is-small">Popust po<br>dogovoru</div>
         <p class="card-body save">Što veća količina, to veći popust po kartici.</p>
-        <a class="btn btn-secondary btn-block" data-wa="pkg20" target="_blank" rel="noopener">Zatraži ponudu</a>
+        <a class="btn btn-secondary btn-block" data-wa="pkg20" href="https://wa.me/385000000000?text=Pozdrav!%20Zelim%20naruciti%2010%2B%20kartica%20-%20molim%20ponudu%20s%20kolicinskim%20popustom." target="_blank" rel="noopener">Zatraži ponudu</a>
       </div>
     </div>
 
@@ -440,7 +460,7 @@
       </div>
 
       <div class="sustav-cta" data-reveal>
-        <a class="btn btn-inverted" data-wa="sustav" target="_blank" rel="noopener">Zatraži ponudu</a>
+        <a class="btn btn-inverted" data-wa="sustav" href="https://wa.me/385000000000?text=Pozdrav!%20Zanima%20me%20napredni%20NFC%20sustav%20i%20ponuda." target="_blank" rel="noopener">Zatraži ponudu</a>
         <span class="sustav-note">Cijena naprednog sustava na upit — javi nam se za personaliziranu ponudu.</span>
       </div>
 
@@ -452,7 +472,7 @@
     <div class="s-kontakt-inner" data-reveal>
       <h2>Spreman za više recenzija?</h2>
       <p class="lead">Naruči kartice ili zatraži ponudu za napredni sustav — javi nam se na WhatsApp i kreni odmah.</p>
-      <a class="btn btn-primary" data-wa="close" target="_blank" rel="noopener">Piši nam na WhatsApp</a>
+      <a class="btn btn-primary" data-wa="close" href="https://wa.me/385000000000?text=Pozdrav!%20Kontaktiram%20vas%20putem%20reviewcard.hr." target="_blank" rel="noopener">Piši nam na WhatsApp</a>
       <p class="note">Odgovaramo u pravilu isti dan · reviewcard.hr</p>
     </div>
   </section>
@@ -465,9 +485,13 @@
 
 </div>
 
-<script src="https://cdn.jsdelivr.net/npm/lenis@1/dist/lenis.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/gsap@3/dist/gsap.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/gsap@3/dist/ScrollTrigger.min.js"></script>
-<script src="js/app.js?v=11"></script>
+<!-- Biblioteke su samoposlužene umjesto s jsDelivra: jedno vanjsko podrijetlo
+     manje (DNS + TLS), a nema ni rizika da izmijenjena datoteka na tuđem CDN-u
+     izvrši svoj kod na ovoj stranici. Verzije: GSAP 3.15.0, Lenis 1.3.26.
+     Za nadogradnju zamijeniti datoteke u js/vendor/ i provjeriti testovima. -->
+<script src="js/vendor/lenis.min.js?v=12" defer></script>
+<script src="js/vendor/gsap.min.js?v=12" defer></script>
+<script src="js/vendor/ScrollTrigger.min.js?v=12" defer></script>
+<script src="js/app.js?v=12" defer></script>
 </body>
 </html>

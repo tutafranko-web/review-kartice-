@@ -36,11 +36,26 @@ function waLink(message) {
    1. WhatsApp linkovi
    ========================================================================= */
 
+/* Gumbi imaju href upisan i u HTML-u, da odredište postoji i bez JS-a —
+   tražilice i agenti koji čitaju sirovi HTML inače ne vide kamo vode.
+   Ovdje se href samo osvježava iz WHATSAPP_NUMBER. Kako se te dvije
+   vrijednosti ne bi tiho razišle, neslaganje se javi u konzoli. */
 function initWhatsApp() {
+  let razlika = null;
   document.querySelectorAll("[data-wa]").forEach(el => {
     const key = el.dataset.wa;
-    if (WA_MESSAGES[key]) el.href = waLink(WA_MESSAGES[key]);
+    if (!WA_MESSAGES[key]) return;
+    const uHtml = (el.getAttribute("href") || "").match(/wa\.me\/(\d+)/);
+    if (uHtml && uHtml[1] !== String(WHATSAPP_NUMBER)) razlika = uHtml[1];
+    el.href = waLink(WA_MESSAGES[key]);
   });
+  if (razlika) {
+    console.warn(
+      "[reviewcard] Broj u HTML-u (" + razlika + ") ne odgovara broju u app.js (" +
+      WHATSAPP_NUMBER + "). Posjetitelji s JS-om idu na broj iz app.js, a " +
+      "tražilice i agenti citaju onaj iz HTML-a. Uskladiti oba."
+    );
+  }
 }
 
 /* =========================================================================

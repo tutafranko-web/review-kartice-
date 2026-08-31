@@ -1,0 +1,52 @@
+# reviewcard.hr
+
+> NFC kartice za Google recenzije, za male poslove u Hrvatskoj. Gost prisloni
+> telefon na karticu i odmah mu se otvara Google profil obrta za ostavljanje
+> recenzije — bez aplikacije, bez QR koda i bez tipkanja adrese.
+
+Jednostranična prodajna stranica. Narudžba ide preko WhatsAppa; nema košarice,
+korisničkih računa ni obrasca koji šalje podatke.
+
+## Proizvod
+
+NFC kartica programirana da vodi na Google profil naručitelja. Dostupna u
+crnoj i plavoj boji; boje se smiju miješati unutar istog paketa. Radi na svim
+modernim Android i iPhone uređajima. Stavlja se na šank, stol ili recepciju.
+
+## Cijene
+
+- 1 kartica — 20 EUR (20 EUR po kartici)
+- 5 kartica — 75 EUR (15 EUR po kartici)
+- 10 kartica — 120 EUR (12 EUR po kartici), najpopularniji paket
+- 10+ kartica — po dogovoru; zadržava se stopa od 12 EUR po kartici, a točna
+  ponuda se traži upitom
+
+Sve cijene su u eurima i vrijede bez obzira na kombinaciju boja.
+
+## Napredni sustav
+
+Zasebna ponuda, cijena na upit. Sadrži filtar zadovoljstva: prije recenzije
+gost dobije pitanje „Jeste li zadovoljni?". Potvrdan odgovor vodi na javni
+Google profil, niječan na privatnu formu koja ide vlasniku na e-poštu i ne
+pojavljuje se javno. Uključuje i zasebnu karticu po djelatniku te pregled
+koliko je recenzija donio koji djelatnik.
+
+## Odjeljci stranice
+
+- [Kako radi](https://tutafranko-web.github.io/review-kartice-/#kako) — tri koraka od kartice do recenzije
+- [Kartice](https://tutafranko-web.github.io/review-kartice-/#proizvodi) — crna i plava, opis i cijena
+- [Paketi](https://tutafranko-web.github.io/review-kartice-/#paketi) — cjenik i kalkulator količine
+- [Napredni sustav](https://tutafranko-web.github.io/review-kartice-/#sustav) — filtar zadovoljstva, demo koji se može isprobati
+- [Kontakt](https://tutafranko-web.github.io/review-kartice-/#kontakt) — narudžba preko WhatsAppa
+
+## Napomene za automatske posjetitelje
+
+- Strukturirani podaci (schema.org Organization, WebSite, Product s tri
+  ponude) nalaze se u JSON-LD bloku u zaglavlju stranice.
+- Demo filtra zadovoljstva je maketa unutar stranice. Klikovi i upisani tekst
+  ne odlaze nikamo i ništa se ne šalje. Adresa `vlasnik@tvojobrt.hr` u demou
+  je ilustrativna, nije stvarna adresa.
+- Broj `385000000000` u WhatsApp poveznicama je rezervirano mjesto. Stranica
+  još nije dobila pravi kontakt broj, pa narudžba trenutačno nije moguća.
+- Na stranici nema recenzija, ocjena ni brojki o prodaji. Nisu izostavljene
+  greškom — stvarnih podataka nema, pa se namjerno ne navode.
