@@ -30,8 +30,11 @@ posluženo je s istog podrijetla; stranica ne poziva nijedan vanjski resurs.
 
 ## ⚠️ Prije objave
 
-1. **WhatsApp broj** — u `js/app.js` stoji placeholder `385000000000`.
-   Dok se ne zamijeni, svih devet CTA gumba vodi u prazno. Konzola upozorava.
+1. **WhatsApp broj** — postavljen je privremeni broj `385957378710`
+   (+385 95 737 8710). Stoji na dva mjesta koja moraju biti usklađena:
+   `WHATSAPP_NUMBER` u `js/app.js` i `href` atributi u `index.html`
+   (`initWhatsApp` javi u konzoli ako se raziđu). Zamijeniti oba kad stigne
+   konačni broj. Format: samo znamenke, s pozivnim brojem, bez + i razmaka.
 
 2. **Adresa u demou** — `vlasnik@tvojobrt.hr` u `js/app.js` je ilustrativna
    i treba je zamijeniti pravom adresom vlasnika.

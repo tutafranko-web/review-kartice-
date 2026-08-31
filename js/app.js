@@ -3,13 +3,12 @@
    ========================================================================= */
 
 /* -------------------------------------------------------------------------
-   ⚠️  ZAMIJENITI PRIJE OBJAVE  ⚠️
-   Ovo je placeholder broj iz prototipa. Dok stoji ovako, SVI gumbi na
-   stranici vode u prazno i stranica ne smije ići u produkciju.
-   Upisati stvarni broj — samo znamenke, s pozivnim brojem, bez + i razmaka.
-   Primjer za Hrvatsku: "385991234567"
+   WhatsApp broj na koji idu svi CTA gumbi. Samo znamenke, s pozivnim brojem,
+   bez + i razmaka. Prikazano +385 95 737 8710 -> ovdje 385957378710.
+   Napomena: broj je zasada privremeni. Ista vrijednost mora stajati i u
+   href atributima u index.html (initWhatsApp javi u konzoli ako se raziđu).
    ------------------------------------------------------------------------- */
-const WHATSAPP_NUMBER = "385000000000";
+const WHATSAPP_NUMBER = "385957378710";
 
 /* Poruke su NAMJERNO bez dijakritike — README traži da tako ostanu radi
    kompatibilnosti s WhatsApp klijentima. Ne dodavati č, ć, ž, š, đ. */
@@ -585,6 +584,11 @@ function boot() {
     console.warn(
       "[reviewcard] WhatsApp broj je jos placeholder (385000000000). " +
       "Svi CTA gumbi vode u prazno. Zamijeni ga u js/app.js prije objave."
+    );
+  } else if (!/^\d{9,15}$/.test(WHATSAPP_NUMBER)) {
+    console.warn(
+      "[reviewcard] WHATSAPP_NUMBER '" + WHATSAPP_NUMBER + "' nije valjan " +
+      "(ocekuje se 9-15 znamenki, bez + i razmaka)."
     );
   }
 }

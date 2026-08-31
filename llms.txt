@@ -46,7 +46,6 @@ koliko je recenzija donio koji djelatnik.
 - Demo filtra zadovoljstva je maketa unutar stranice. Klikovi i upisani tekst
   ne odlaze nikamo i ništa se ne šalje. Adresa `vlasnik@tvojobrt.hr` u demou
   je ilustrativna, nije stvarna adresa.
-- Broj `385000000000` u WhatsApp poveznicama je rezervirano mjesto. Stranica
-  još nije dobila pravi kontakt broj, pa narudžba trenutačno nije moguća.
+- Narudžba ide na WhatsApp broj +385 95 737 8710 (zasada privremeni broj).
 - Na stranici nema recenzija, ocjena ni brojki o prodaji. Nisu izostavljene
   greškom — stvarnih podataka nema, pa se namjerno ne navode.
