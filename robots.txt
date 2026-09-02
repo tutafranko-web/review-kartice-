@@ -7,39 +7,48 @@
 User-agent: *
 Allow: /
 Disallow: /preview.html
+Disallow: /oglasi/
 
 # Asistenti i agenti smiju citati sadrzaj: cilj je da stranicu mogu
 # preporuciti i tocno prenijeti cijene. Sazetak je u /llms.txt.
 User-agent: GPTBot
 Allow: /
 Disallow: /preview.html
+Disallow: /oglasi/
 
 User-agent: OAI-SearchBot
 Allow: /
 Disallow: /preview.html
+Disallow: /oglasi/
 
 User-agent: ChatGPT-User
 Allow: /
 Disallow: /preview.html
+Disallow: /oglasi/
 
 User-agent: ClaudeBot
 Allow: /
 Disallow: /preview.html
+Disallow: /oglasi/
 
 User-agent: Claude-User
 Allow: /
 Disallow: /preview.html
+Disallow: /oglasi/
 
 User-agent: PerplexityBot
 Allow: /
 Disallow: /preview.html
+Disallow: /oglasi/
 
 User-agent: Google-Extended
 Allow: /
 Disallow: /preview.html
+Disallow: /oglasi/
 
 User-agent: Bingbot
 Allow: /
 Disallow: /preview.html
+Disallow: /oglasi/
 
 Sitemap: https://tutafranko-web.github.io/review-kartice-/sitemap.xml

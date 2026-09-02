@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="hr"><head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<title>Oglasi — pošalji na WhatsApp</title>
+<style>
+  :root{
+    --bg:#0e1018; --panel:#171a29; --line:#2a2d42; --text:#e9e9ed;
+    --muted:#9095ab; --accent:#9184d9; --wa:#25d366; --wa-ink:#0b2c17;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html{-webkit-text-size-adjust:100%}
+  body{
+    background:var(--bg); color:var(--text);
+    font-family:'Segoe UI',system-ui,-apple-system,sans-serif;
+    padding:26px 16px calc(40px + env(safe-area-inset-bottom));
+    background-image:radial-gradient(680px 420px at 50% -12%,#2a2450 0,transparent 60%);
+    line-height:1.5;
+  }
+  header{max-width:520px;margin:0 auto 22px;text-align:center}
+  h1{font-size:23px;font-weight:600;letter-spacing:-.01em}
+  h1 b{color:var(--accent);font-weight:600}
+  .lead{color:var(--muted);font-size:14px;margin-top:8px}
+  .stack{max-width:520px;margin:0 auto;display:flex;flex-direction:column;gap:20px}
+  .card{background:var(--panel);border:1px solid var(--line);border-radius:16px;overflow:hidden;
+    box-shadow:0 16px 40px rgba(0,0,0,.4)}
+  .card h2{font-size:14px;font-weight:600;padding:15px 17px 3px}
+  .card .fmt{font-size:12px;color:var(--muted);padding:0 17px 13px}
+  .thumb{background:#0b0d15;display:flex;justify-content:center;padding:14px}
+  .thumb img{display:block;max-width:100%;height:auto;border-radius:8px}
+  .thumb.tall img{max-height:340px;width:auto}
+  .row{display:flex;gap:10px;padding:14px 17px 17px}
+  .btn{flex:1;display:inline-flex;align-items:center;justify-content:center;gap:9px;
+    font-size:15px;font-weight:600;text-decoration:none;border-radius:11px;padding:14px 12px;
+    border:1px solid transparent;cursor:pointer;transition:.15s;min-height:50px}
+  .btn.share{background:var(--wa);color:var(--wa-ink)}
+  .btn.share:active{transform:translateY(1px)}
+  .btn.dl{background:transparent;color:var(--text);border-color:var(--line)}
+  .btn.dl:active{border-color:var(--accent)}
+  .btn svg{width:20px;height:20px;flex:0 0 auto}
+  .hint{max-width:520px;margin:24px auto 0;font-size:13px;line-height:1.65;color:var(--muted);
+    border:1px solid var(--line);background:rgba(145,132,217,.06);border-radius:12px;padding:15px 17px}
+  .hint b{color:var(--text);font-weight:600}
+  .hint ol{margin:8px 0 0 18px;padding:0}
+  .hint li{margin:4px 0}
+  .toast{position:fixed;left:50%;bottom:24px;transform:translateX(-50%) translateY(20px);
+    background:#20233a;border:1px solid var(--line);color:var(--text);font-size:13px;
+    padding:11px 18px;border-radius:10px;opacity:0;pointer-events:none;transition:.25s;z-index:9}
+  .toast.on{opacity:1;transform:translateX(-50%) translateY(0)}
+  .foot{max-width:520px;margin:22px auto 0;text-align:center}
+  .foot a{color:var(--muted);font-size:12.5px;text-decoration:none;border-bottom:1px solid var(--line)}
+</style></head>
+<body>
+<header>
+  <h1>Oglasi za <b>reviewcard.hr</b></h1>
+  <p class="lead">Otvori na mobitelu, dodirni <b>Podijeli na WhatsApp</b> i objavi kao Status/priču.</p>
+</header>
+
+<div class="stack" id="stack"></div>
+
+<div class="hint">
+  <b>Kako objaviti kao WhatsApp Status (priču):</b>
+  <ol>
+    <li>Dodirni <b>Podijeli na WhatsApp</b> ispod oglasa.</li>
+    <li>U WhatsAppu odaberi <b>„Moj status"</b> (ili pošalji kontaktu).</li>
+    <li>Dodaj tekst/ponudu po želji i pošalji.</li>
+  </ol>
+  Ako se dijeljenje ne otvori (npr. na računalu), koristi <b>Preuzmi</b> pa objavi sliku ručno.
+</div>
+
+<p class="foot"><a href="../" target="_blank">← Stranica reviewcard.hr</a></p>
+
+<div class="toast" id="toast"></div>
+
+<script>
+  var ADS = [
+    { file:"oglas-story-9x16.png", name:"reviewcard-story-9x16.png", title:"Story / priča — 1080×1920", fmt:"Za WhatsApp/Instagram priče i reelove", tall:true },
+    { file:"oglas-feed-1x1.png",  name:"reviewcard-feed-1x1.png",   title:"Feed / kvadrat — 1080×1080", fmt:"Za feed objave i slanje u chat", tall:false }
+  ];
+  var SHARE_SVG = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.6" y1="13.5" x2="15.4" y2="17.5"/><line x1="15.4" y1="6.5" x2="8.6" y2="10.5"/></svg>';
+  var DL_SVG = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v12"/><path d="M7 11l5 5 5-5"/><path d="M5 21h14"/></svg>';
+
+  var toast = document.getElementById("toast"), toastT;
+  function say(msg){ toast.textContent = msg; toast.classList.add("on");
+    clearTimeout(toastT); toastT = setTimeout(function(){ toast.classList.remove("on"); }, 2600); }
+
+  var canShareFiles = false;
+  try { canShareFiles = !!(navigator.canShare && navigator.canShare({ files:[ new File([new Blob([""])], "t.png", {type:"image/png"}) ] })); } catch(e){}
+
+  function download(url, name){
+    var a = document.createElement("a"); a.href = url; a.download = name;
+    document.body.appendChild(a); a.click(); a.remove();
+  }
+
+  async function share(ad){
+    try{
+      var resp = await fetch(ad.file, { cache:"force-cache" });
+      var blob = await resp.blob();
+      var file = new File([blob], ad.name, { type:"image/png" });
+      if (navigator.canShare && navigator.canShare({ files:[file] })){
+        await navigator.share({ files:[file], title:"reviewcard.hr" });
+      } else {
+        download(ad.file, ad.name);
+        say("Dijeljenje nije podržano — slika je preuzeta.");
+      }
+    } catch(err){
+      if (err && err.name === "AbortError") return; // korisnik otkazao
+      download(ad.file, ad.name);
+      say("Slika je preuzeta.");
+    }
+  }
+
+  var stack = document.getElementById("stack");
+  ADS.forEach(function(ad){
+    var card = document.createElement("div"); card.className = "card";
+    card.innerHTML =
+      '<h2>'+ad.title+'</h2>' +
+      '<div class="fmt">'+ad.fmt+'</div>' +
+      '<div class="thumb'+(ad.tall?" tall":"")+'"><img src="'+ad.file+'" alt="'+ad.title+'" loading="lazy"></div>' +
+      '<div class="row">' +
+        '<button class="btn share">'+SHARE_SVG+(canShareFiles?"Podijeli na WhatsApp":"Podijeli")+'</button>' +
+        '<a class="btn dl" href="'+ad.file+'" download="'+ad.name+'">'+DL_SVG+'Preuzmi</a>' +
+      '</div>';
+    card.querySelector(".share").addEventListener("click", function(){ share(ad); });
+    stack.appendChild(card);
+  });
+</script>
+</body></html>
